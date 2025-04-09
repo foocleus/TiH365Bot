@@ -12,7 +12,7 @@
         
         "COM_START": "Resets all preferences",
         "COM_HELP": "Sends list of all available commands",
-        "COM_RND": "Returns a random number in range from 0-255",
+        "COM_RND": "Returns a random number in ranges from 0-255",
         "COM_PREFERENCES": "Opens menu of preferences",
 
         "INF_HELP_HEADER": "\ud83d\udcc3 Here is the list of all available commands:\n\n",

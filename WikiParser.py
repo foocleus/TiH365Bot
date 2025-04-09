@@ -4,23 +4,18 @@ from random import sample
 from month_full_names import *
 from logger import Logger
 
-EVENTS = "== Events =="
-BIRTHS = "== Births =="
-DEATHS = "== Deaths =="
-HOLIDAYS = "== Holidays and observances =="
+EVENTS = "Events =="
+BIRTHS = "Births =="
+DEATHS = "Deaths =="
+HOLIDAYS = "Holidays and observances =="
 
-PRE_1600 = "=== Pre-1600 ==="
-Y1601_1900 = "=== 1601-1900 ==="
-Y1901_PRESENT = "=== 1901_Present ==="
+RANGES = ["=== Pre-1600 ===", "=== 1601-1900 ===", "=== 1901_Present ==="]
 
 
 def setLanguage(lang):
     pass
 
-def getDayEvents(date, sections, ranges, entriesPerRange):
-    SECTION_SPLITTER = "\n\n\n== "
-    RANGE_SPLITTER = "\n\n\n=== "
-
+def getDayEvents(date, selectedSections, rangesCount):
     message = ""
     def getPage(date : str): 
         month, day = date.split('.')
@@ -30,31 +25,43 @@ def getDayEvents(date, sections, ranges, entriesPerRange):
         except Exception.__name__ as ename:
             Logger.error(ename)
     
-    def splitContent(content : str, splitter):
-        sectionsRaw = content.split(splitter)
-        if splitter == SECTION_SPLITTER: 
-            sectionsRaw = sectionsRaw[1:5] # cut off everything, except list of dates
+    def splitContent(content : str):
+        sectionsRaw = content.split("\n\n\n== ")
+        sectionsRaw = sectionsRaw[1:5] # cut off all sections, except list of dates
         sectionsFinal = []
         for section in sectionsRaw:
-            sectionsFinal.append(section[section.find('\n')+3:]) # delete remainings of section header
+            if not (section[:section.find('\n')]) in selectedSections:
+                continue
+
+            if section[:section.find('\n')] == HOLIDAYS:        # delete remaining of section header
+                sectionsFinal.append(section[section.find('\n'):])
+            else:
+                sectionsFinal.append(section[section.find('\n')+3:]) 
+        return sectionsFinal
+    
+    def splitSection(content : str):
+        sectionsRaw = content.split("\n\n\n=== ")
+        sectionsFinal = []
+        for section in sectionsRaw:
+            sectionsFinal.append(section[section.find('\n')+1:]) # delete remaining of section header
         return sectionsFinal
     
     def splitEntries(section):
         return section.split('\n')
 
-    for section in splitContent(getPage(date).content, SECTION_SPLITTER):
-        for range in splitContent(section, RANGE_SPLITTER):
+    for section in splitContent(getPage(date).content):
+        for range in splitSection(section):
             entries = splitEntries(range)
-            if len(entries) < entriesPerRange:
+            if len(entries) < 3:
                 message += "\n".join(entries)
             else:
-                message += "\n" + "\n".join(sample(entries, entriesPerRange))
-        
+                message += "\n" + "\n".join(sample(entries, 3))
+
     print(message)
     
     pass
 
-def getTodayEvents(sections, ranges, entriesPerRange):
-    return getDayEvents(wikipedia.datetime.now().strftime("%m.%d"), sections, ranges, entriesPerRange)
+def getTodayEvents(selectedSections, rangesCount):
+    return getDayEvents(wikipedia.datetime.now().strftime("%m.%d"), selectedSections, rangesCount)
 
-getTodayEvents([EVENTS, BIRTHS, DEATHS, HOLIDAYS], [PRE_1600, Y1601_1900, Y1901_PRESENT], 3)
+getTodayEvents([BIRTHS, DEATHS], [2, 8, 2])
