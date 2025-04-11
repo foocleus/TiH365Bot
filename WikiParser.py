@@ -21,7 +21,7 @@ def getDayEvents(date, selectedSections, rangesCount):
         month, day = date.split('.')
         month, day = int(month), int(day)
         try: 
-            return wikipedia.page(f"{months_full_names[month]}_{day}")
+            return wikipedia.page(f"{months_full_names[month]} {day}", auto_suggest=False)
         except Exception.__name__ as ename:
             Logger.error(ename)
     
