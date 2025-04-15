@@ -63,6 +63,24 @@ def getDayEvents(date, selectedSections, rangesCount):
     
     def splitEntries(section):
         return section.split('\n')
+    
+    def sortEntries(entries):
+        def safeIntSort(iterable):
+            filtered = [value for value in iterable if value.isdecimal()]
+            return sorted(filtered, key=int)
+         
+        years = []
+        sortedEntries = []
+        for entry in entries:
+            years.append(entry[:entry.find(" ")])
+        years = safeIntSort(years)
+        for year in years:
+            for entry in entries:
+                if entry.find(year) > -1:
+                    sortedEntries.append(entry)
+                    break
+        return sortedEntries
+
 
     for section in splitContent(getPage(date).content):
         headerEndIndex = section.find('/b>')+3
@@ -73,7 +91,10 @@ def getDayEvents(date, selectedSections, rangesCount):
             if len(entries) < 3:
                 message += "\n".join(entries)
             else:
-                message += "\n" + "\n".join(sample(entries, 3))
+                if headerEndIndex != len(headers["Holidays and observances =="]):
+                    message += "\n" + "\n".join(sortEntries(sample(entries, 3)))
+                else:
+                    message += "\n" + "\n".join(sample(entries, 3))
         message += "\n"
 
     print(message)
