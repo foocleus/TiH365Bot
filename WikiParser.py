@@ -4,6 +4,10 @@ from random import sample
 from month_full_names import *
 from logger import Logger
 
+
+CONTENT_START_INDEX = 1
+CONTENT_END_INDEX = 5
+
 EVENTS = "Events =="
 BIRTHS = "Births =="
 DEATHS = "Deaths =="
@@ -34,33 +38,36 @@ def getDayEvents(date, selectedSections, rangesCount):
     
     def splitContent(content : str):
         sectionsRaw = content.split("\n\n\n== ")
-        sectionsRaw = sectionsRaw[1:5]                          # cut off all sections, except list of dates
+        sectionsRaw = sectionsRaw[CONTENT_START_INDEX : CONTENT_END_INDEX]
         sectionsFinal = []
         for section in sectionsRaw:
             if not section[:section.find('\n')] in selectedSections:
                 continue
 
             sectionName = headers[section[:section.find('\n')]]
+            rangesStartIndex = section.find('\n')
 
-            if section[:section.find('\n')] == HOLIDAYS:        # delete remaining of section header
-                sectionsFinal.append(sectionName + section[section.find('\n'):])
+            if section[:rangesStartIndex] == HOLIDAYS:        
+                sectionsFinal.append(sectionName + section[rangesStartIndex+1:])
             else:
-                sectionsFinal.append(sectionName + section[section.find('\n')+3:]) 
+                sectionsFinal.append(sectionName + section[rangesStartIndex+3:]) 
         return sectionsFinal
     
     def splitSection(content : str):
-        sectionsRaw = content.split("\n\n\n=== ")
-        sectionsFinal = []
-        for section in sectionsRaw:
-            sectionsFinal.append(section[section.find('\n')+1:]) # delete remaining of section header
-        return sectionsFinal
+        rangesRaw = content.split("\n\n\n=== ")
+        rangesFinal = []
+        for range in rangesRaw:
+            entriesStartIndex = range.find('\n')+1
+            rangesFinal.append(range[entriesStartIndex:])
+        return rangesFinal
     
     def splitEntries(section):
         return section.split('\n')
 
     for section in splitContent(getPage(date).content):
-        message += section[:section.find('/b>')+3]
-        section = section[section.find('/b>')+3:]
+        headerEndIndex = section.find('/b>')+3
+        message += section[:headerEndIndex]
+        section = section[headerEndIndex:]
         for range in splitSection(section):
             entries = splitEntries(range)
             if len(entries) < 3:
@@ -76,4 +83,4 @@ def getDayEvents(date, selectedSections, rangesCount):
 def getTodayEvents(selectedSections, rangesCount):
     return getDayEvents(wikipedia.datetime.now().strftime("%m.%d"), selectedSections, rangesCount)
 
-getTodayEvents([BIRTHS, DEATHS], [2, 8, 2])
+getTodayEvents([BIRTHS, DEATHS, HOLIDAYS], [2, 8, 2])
