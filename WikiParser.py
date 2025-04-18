@@ -80,7 +80,21 @@ def getDayEvents(date, selectedSections, rangesCount):
                     sortedEntries.append(entry)
                     break
         return sortedEntries
+    
+    def addLinksToEntries(entries):
+        entriesFinal = []
+        for entry in entries:
+            try:
+                nameStartIndex = entry.find(" – ")+3
+                nameEndIndex = entry.find(", ", nameStartIndex)
+                name = entry[nameStartIndex:nameEndIndex]
+                url = f"https://en.wikipedia.org/wiki/{name}"
+            except:
+                entriesFinal.append(entry)
+            else:
+                entriesFinal.append(entry[:nameStartIndex] + f'<a href="{url}">' + name + '<a/>' + entry[nameEndIndex:]) 
 
+        return entriesFinal
 
     for section in splitContent(getPage(date).content):
         headerEndIndex = section.find('/b>')+3
@@ -91,17 +105,17 @@ def getDayEvents(date, selectedSections, rangesCount):
             if len(entries) < 3:
                 message += "\n".join(entries)
             else:
-                if headerEndIndex != len(headers["Holidays and observances =="]):
+                if headerEndIndex == len(headers["Events =="]):
                     message += "\n" + "\n".join(sortEntries(sample(entries, 3)))
-                else:
+                elif headerEndIndex == len(headers["Holidays and observances =="]):
                     message += "\n" + "\n".join(sample(entries, 3))
+                else:
+                    message += "\n" + "\n".join(addLinksToEntries(sortEntries(sample(entries, 3))))
         message += "\n"
 
     print(message)
-    
-    pass
 
 def getTodayEvents(selectedSections, rangesCount):
     return getDayEvents(wikipedia.datetime.now().strftime("%m.%d"), selectedSections, rangesCount)
 
-getTodayEvents([BIRTHS, DEATHS, HOLIDAYS], [2, 8, 2])
+getTodayEvents([EVENTS, BIRTHS, DEATHS, HOLIDAYS], [2, 8, 2])
