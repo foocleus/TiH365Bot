@@ -7,6 +7,8 @@ from logger import Logger
 
 CONTENT_START_INDEX = 1
 CONTENT_END_INDEX = 5
+SECTION_SPLITER = "\n\n\n== "
+RANGE_SPLITER = "\n\n\n=== "
 
 EVENTS = "Events =="
 BIRTHS = "Births =="
@@ -29,7 +31,7 @@ def setLanguage(lang):
 def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
     message = ""
     def getPage(date : str): 
-        month, day = date.split('.')
+        month, day = date.split(".")
         month, day = int(month), int(day)
         try: 
             return wikipedia.page(f"{months_full_names[month]} {day}", auto_suggest=False)
@@ -37,15 +39,15 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
             Logger.error(ename)
     
     def splitContent(content : str):
-        sectionsRaw = content.split("\n\n\n== ")
+        sectionsRaw = content.split(SECTION_SPLITER)
         sectionsRaw = sectionsRaw[CONTENT_START_INDEX : CONTENT_END_INDEX]
         sectionsFinal = []
         for section in sectionsRaw:
-            if not section[:section.find('\n')] in selectedSections:
+            if not section[:section.find("\n")] in selectedSections:
                 continue
 
-            sectionName = headers[section[:section.find('\n')]]
-            rangesStartIndex = section.find('\n')
+            sectionName = headers[section[:section.find("\n")]]
+            rangesStartIndex = section.find("\n")
 
             if section[:rangesStartIndex] == HOLIDAYS:        
                 sectionsFinal.append(sectionName + section[rangesStartIndex+1:])
@@ -54,15 +56,15 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
         return sectionsFinal
     
     def splitSection(content : str):
-        rangesRaw = content.split("\n\n\n=== ")
+        rangesRaw = content.split(RANGE_SPLITER)
         rangesFinal = []
         for range in rangesRaw:
-            entriesStartIndex = range.find('\n')+1
+            entriesStartIndex = range.find("\n")+1
             rangesFinal.append(range[entriesStartIndex:])
         return rangesFinal
     
     def splitEntries(section):
-        return section.split('\n')
+        return section.split("\n")
     
     def sortEntries(entries):
         def safeIntSort(iterable):
@@ -92,13 +94,13 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
             except:
                 entriesFinal.append(entry)
             else:
-                entriesFinal.append(entry[:nameStartIndex] + f'<a href="{url}">' + name + '</a>' + entry[nameEndIndex:]) 
+                entriesFinal.append(entry[:nameStartIndex] + f"<a href="{url}">" + name + "</a>" + entry[nameEndIndex:]) 
 
         return entriesFinal
 
     page = getPage(date)
     for section in splitContent(page.content):
-        headerEndIndex = section.find('/b>')+3
+        headerEndIndex = section.find("/b>")+3
         message += section[:headerEndIndex]
         section = section[headerEndIndex:]
         ri = 0 # range index
@@ -116,7 +118,7 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
             message += "\n"
             ri += 1
 
-    message += f"\n🔗 Soruce: <a href=\"{page.url}\">Wikipedia</a>"
+    message += f"\n🔗 Source: <a href=\"{page.url}\">Wikipedia</a>"
     return message
 
 def getTodayEvents(selectedSections, entriesPerRange, holidaysEntries):
