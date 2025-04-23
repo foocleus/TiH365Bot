@@ -92,7 +92,7 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
             except:
                 entriesFinal.append(entry)
             else:
-                entriesFinal.append(entry[:nameStartIndex] + f'<a href="{url}">' + name + '<a/>' + entry[nameEndIndex:]) 
+                entriesFinal.append(entry[:nameStartIndex] + f'<a href="{url}">' + name + '</a>' + entry[nameEndIndex:]) 
 
         return entriesFinal
 
@@ -117,9 +117,9 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
             ri += 1
 
     message += f"\n🔗 Soruce: <a href=\"{page.url}\">Wikipedia</a>"
-    print(message)
+    return message
 
 def getTodayEvents(selectedSections, entriesPerRange, holidaysEntries):
     return getDayEvents(wikipedia.datetime.now().strftime("%m.%d"), selectedSections, entriesPerRange, holidaysEntries)
 
-getTodayEvents([EVENTS, BIRTHS, DEATHS, HOLIDAYS], [2, 8, 2], 5)
+#getTodayEvents([EVENTS, BIRTHS, DEATHS, HOLIDAYS], [2, 8, 2], 5)

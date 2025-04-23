@@ -7,6 +7,7 @@ from aiogram.types.callback_query import CallbackQuery
 
 from stores import CommandStore, KeyboardStore, ButtonStore, CallbackStore
 import stores.StringStore as Strs
+import WikiParser
 import DataManager
 
 dp = Dispatcher()
@@ -49,6 +50,12 @@ async def handleCallback(callbackQuery: CallbackQuery):
                                                        + CommandStore.listCommandInfo()
                                                        + Strs.get(Strs.INF_TUTOR_NOTICE), 
                                                       reply_markup=KeyboardStore.inline.tutorial)
+                await callbackQuery.message.answer(WikiParser.getTodayEvents([WikiParser.EVENTS,
+                                                              WikiParser.BIRTHS,
+                                                              WikiParser.DEATHS,
+                                                              WikiParser.HOLIDAYS],
+                                                              [3, 8, 3],
+                                                              5))
             else:                                           # User sets language using preferences menu
                 DataManager.set("lang", language, userId)
                 Strs.setLocaleById(userId)
