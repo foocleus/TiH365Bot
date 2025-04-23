@@ -96,7 +96,8 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
 
         return entriesFinal
 
-    for section in splitContent(getPage(date).content):
+    page = getPage(date)
+    for section in splitContent(page.content):
         headerEndIndex = section.find('/b>')+3
         message += section[:headerEndIndex]
         section = section[headerEndIndex:]
@@ -115,6 +116,7 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
             message += "\n"
             ri += 1
 
+    message += f"\n🔗 Soruce: <a href=\"{page.url}\">Wikipedia</a>"
     print(message)
 
 def getTodayEvents(selectedSections, entriesPerRange, holidaysEntries):
