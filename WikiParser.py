@@ -26,7 +26,7 @@ RANGES = ["=== Pre-1600 ===", "=== 1601-1900 ===", "=== 1901_Present ==="]
 def setLanguage(lang):
     pass
 
-def getDayEvents(date, selectedSections, rangesCount):
+def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
     message = ""
     def getPage(date : str): 
         month, day = date.split('.')
@@ -100,22 +100,24 @@ def getDayEvents(date, selectedSections, rangesCount):
         headerEndIndex = section.find('/b>')+3
         message += section[:headerEndIndex]
         section = section[headerEndIndex:]
+        ri = 0 # range index
         for range in splitSection(section):
             entries = splitEntries(range)
-            if len(entries) < 3:
+            if len(entries) <= entriesPerRange[ri]:
                 message += "\n".join(entries)
             else:
                 if headerEndIndex == len(headers["Events =="]):
-                    message += "\n" + "\n".join(sortEntries(sample(entries, 3)))
+                    message += "\n" + "\n".join(sortEntries(sample(entries, entriesPerRange[ri])))
                 elif headerEndIndex == len(headers["Holidays and observances =="]):
-                    message += "\n" + "\n".join(sample(entries, 3))
+                    message += "\n" + "\n".join(sample(entries, holidaysEntries))
                 else:
-                    message += "\n" + "\n".join(addLinksToEntries(sortEntries(sample(entries, 3))))
-        message += "\n"
+                    message += "\n" + "\n".join(addLinksToEntries(sortEntries(sample(entries, entriesPerRange[ri]))))
+            message += "\n"
+            ri += 1
 
     print(message)
 
-def getTodayEvents(selectedSections, rangesCount):
-    return getDayEvents(wikipedia.datetime.now().strftime("%m.%d"), selectedSections, rangesCount)
+def getTodayEvents(selectedSections, entriesPerRange, holidaysEntries):
+    return getDayEvents(wikipedia.datetime.now().strftime("%m.%d"), selectedSections, entriesPerRange, holidaysEntries)
 
-getTodayEvents([EVENTS, BIRTHS, DEATHS, HOLIDAYS], [2, 8, 2])
+getTodayEvents([EVENTS, BIRTHS, DEATHS, HOLIDAYS], [2, 8, 2], 5)
