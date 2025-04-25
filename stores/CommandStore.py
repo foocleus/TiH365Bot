@@ -4,7 +4,9 @@ import stores.StringStore as Strs
 
 START = BotCommand(command="start", description=Strs.COM_START)
 HELP = BotCommand(command="help", description=Strs.COM_HELP)
-RND = BotCommand(command="rnd", description=Strs.COM_RND)
+EVENTSTODAY = BotCommand(command="eventstoday", description=Strs.COM_EVENTSTODAY)
+EVENTSTHATDAY = BotCommand(command="eventsthatday", description=Strs.COM_EVENTS_THAT_DAY)
+EVENTSTHATDAYALL = BotCommand(command="eventsthatdayall", description=Strs.COM_EVENTS_THAT_DAY_ALL)
 PREFERENCES = BotCommand(command="preferences", description=Strs.COM_PREFERENCES)
 PREF = BotCommand(command="pref", description=Strs.COM_PREFERENCES)
 

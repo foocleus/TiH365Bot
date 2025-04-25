@@ -12,7 +12,9 @@
         
         "COM_START": "Resets all preferences",
         "COM_HELP": "Sends list of all available commands",
-        "COM_RND": "Returns a random number in ranges from 0-255",
+        "COM_EVENTSTODAY": "Lists random events that happened today",
+        "COM_EVENTSTHATDAY": "Lists random events that happened on the selected day",
+        "COM_EVENTSTHATDAYALL": "Lists all events that happened on the selected day",
         "COM_PREFERENCES": "Opens menu of preferences",
 
         "INF_HELP_HEADER": "\ud83d\udcc3 Here is the list of all available commands:\n\n",
@@ -36,7 +38,9 @@
         
         "COM_START": "router",
         "COM_HELP": "router",
-        "COM_RND": "router",
+        "COM_EVENTSTODAY": "router",
+        "COM_EVENTSTHATDAY": "router",
+        "COM_EVENTSTHATDAYALL": "router",
         "COM_PREFERENCES": "router",
             
         "INF_HELP_HEADER": "\ud83d\udcc3 router\n\n",

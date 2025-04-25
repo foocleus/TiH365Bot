@@ -94,7 +94,7 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
             except:
                 entriesFinal.append(entry)
             else:
-                entriesFinal.append(entry[:nameStartIndex] + f"<a href="{url}">" + name + "</a>" + entry[nameEndIndex:]) 
+                entriesFinal.append(entry[:nameStartIndex] + f"<a href=\"{url}\">" + name + "</a>" + entry[nameEndIndex:]) 
 
         return entriesFinal
 

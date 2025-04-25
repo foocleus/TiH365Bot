@@ -54,7 +54,7 @@ async def handleCallback(callbackQuery: CallbackQuery):
                                                               WikiParser.BIRTHS,
                                                               WikiParser.DEATHS,
                                                               WikiParser.HOLIDAYS],
-                                                              [3, 8, 3],
+                                                              [3, 3, 3],
                                                               5))
             else:                                           # User sets language using preferences menu
                 DataManager.set("lang", language, userId)
@@ -81,8 +81,17 @@ async def handleCommand(message: Message):
                     await message.answer("Select your language:", reply_markup=KeyboardStore.inline.language)
             case CommandStore.HELP.command:
                 await message.answer(Strs.get(Strs.INF_HELP_HEADER) + CommandStore.listCommandInfo())
-            case CommandStore.RND.command:
-                await message.answer(str(randint(0, 255)), reply_markup=KeyboardStore.reply.rndCommand)
+            case CommandStore.EVENTSTODAY.command:
+                await message.answer(WikiParser.getTodayEvents([WikiParser.EVENTS,
+                                                              WikiParser.BIRTHS,
+                                                              WikiParser.DEATHS,
+                                                              WikiParser.HOLIDAYS],
+                                                              [3, 8, 3],
+                                                              5))
+            case CommandStore.EVENTSTHATDAY.command:
+                pass
+            case CommandStore.EVENTSTHATDAYALL.command:
+                pass
             case CommandStore.PREFERENCES.command | CommandStore.PREF.command:
                 await message.answer(getPreferencesRaw(userId), reply_markup=KeyboardStore.inline.preferences)
             case _:
