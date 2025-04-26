@@ -29,13 +29,14 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 case CallbackStore.TUTORIAL_FINISH:
                     await callbackQuery.message.edit_reply_markup(None)
                     DataManager.set("isActivated", True, userId)
-                    await callbackQuery.message.answer(WikiParser.getTodayEvents([WikiParser.EVENTS,
-                                                              WikiParser.BIRTHS,
-                                                              WikiParser.DEATHS,
-                                                              WikiParser.HOLIDAYS],
-                                                              [3, 3, 3],
-                                                              5))
-
+                    await sendLargeText(WikiParser.getTodayEvents([WikiParser.EVENTS,
+                                                             WikiParser.BIRTHS,
+                                                             WikiParser.DEATHS,
+                                                             WikiParser.HOLIDAYS],
+                                                             [3, 3, 3],
+                                                             5),
+                                                             callbackQuery.message)
+                    
                 case CallbackStore.RESTART_CONTINUE:
                     DataManager.set("isActivated", False, userId)
                     await callbackQuery.message.edit_text("Select your language:", reply_markup=KeyboardStore.inline.language)
@@ -82,12 +83,14 @@ async def handleCommand(message: Message):
             case CommandStore.HELP.command:
                 await message.answer(Strs.get(Strs.INF_HELP_HEADER) + CommandStore.listCommandInfo())
             case CommandStore.EVENTSTODAY.command:
-                await message.answer(WikiParser.getTodayEvents([WikiParser.EVENTS,
-                                                              WikiParser.BIRTHS,
-                                                              WikiParser.DEATHS,
-                                                              WikiParser.HOLIDAYS],
-                                                              [3, 8, 3],
-                                                              5))
+                await sendLargeText(WikiParser.getTodayEvents([WikiParser.EVENTS,
+                                                         WikiParser.BIRTHS,
+                                                         WikiParser.DEATHS,
+                                                         WikiParser.HOLIDAYS],
+                                                         [3, 8, 3],
+                                                         5),
+                                                         message)
+
             case CommandStore.EVENTSTHATDAY.command:
                 pass
             case CommandStore.EVENTSTHATDAYALL.command:
@@ -116,6 +119,10 @@ async def handleText(message: Message):
     else:
         await message.answer(Strs.get(Strs.ERR_NOT_TEXT_INPUT))
 
+
+async def sendLargeText(text, messagesClass):
+    for i in range(len(text) // 4096 + 1):
+        await messagesClass.answer(text[4096 * i:4096 * (i + 1)])
 
 def getPreferencesRaw(userId) -> str:
     return f'''
