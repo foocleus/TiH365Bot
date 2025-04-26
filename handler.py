@@ -29,6 +29,12 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 case CallbackStore.TUTORIAL_FINISH:
                     await callbackQuery.message.edit_reply_markup(None)
                     DataManager.set("isActivated", True, userId)
+                    await callbackQuery.message.answer(WikiParser.getTodayEvents([WikiParser.EVENTS,
+                                                              WikiParser.BIRTHS,
+                                                              WikiParser.DEATHS,
+                                                              WikiParser.HOLIDAYS],
+                                                              [3, 3, 3],
+                                                              5))
 
                 case CallbackStore.RESTART_CONTINUE:
                     DataManager.set("isActivated", False, userId)
@@ -50,12 +56,6 @@ async def handleCallback(callbackQuery: CallbackQuery):
                                                        + CommandStore.listCommandInfo()
                                                        + Strs.get(Strs.INF_TUTOR_NOTICE), 
                                                       reply_markup=KeyboardStore.inline.tutorial)
-                await callbackQuery.message.answer(WikiParser.getTodayEvents([WikiParser.EVENTS,
-                                                              WikiParser.BIRTHS,
-                                                              WikiParser.DEATHS,
-                                                              WikiParser.HOLIDAYS],
-                                                              [3, 3, 3],
-                                                              5))
             else:                                           # User sets language using preferences menu
                 DataManager.set("lang", language, userId)
                 Strs.setLocaleById(userId)
