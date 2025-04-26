@@ -1,3 +1,4 @@
+import os
 import asyncio
 import json
 from copy import deepcopy
@@ -9,11 +10,13 @@ defaultValues = {
     "isActivated": False
 }
 userData = {}
+
+if not os.path.exists("./user-data.json"):
+    with open("./user-data.json", "w") as f: f.write("{}")
+
 with open("./user-data.json", "r") as dataFile:
-    try:
-        userData = json.load(dataFile)
-    except:
-        print(f"There was an error reading user data file")
+    userData = json.load(dataFile)
+
 
 
 def get(entry, userId):
