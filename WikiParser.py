@@ -7,8 +7,8 @@ from logger import Logger
 
 CONTENT_START_INDEX = 1
 CONTENT_END_INDEX = 5
-SECTION_SPLITER = "\n\n\n== "
-RANGE_SPLITER = "\n\n\n=== "
+SECTION_SPLITTER = "\n\n\n== "
+RANGE_SPLITTER = "\n\n\n=== "
 
 EVENTS = "Events =="
 BIRTHS = "Births =="
@@ -39,7 +39,7 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
             Logger.error(ename)
     
     def splitContent(content : str):
-        sectionsRaw = content.split(SECTION_SPLITER)
+        sectionsRaw = content.split(SECTION_SPLITTER)
         sectionsRaw = sectionsRaw[CONTENT_START_INDEX : CONTENT_END_INDEX]
         sectionsFinal = []
         for section in sectionsRaw:
@@ -56,7 +56,7 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
         return sectionsFinal
     
     def splitSection(content : str):
-        rangesRaw = content.split(RANGE_SPLITER)
+        rangesRaw = content.split(RANGE_SPLITTER)
         rangesFinal = []
         for range in rangesRaw:
             entriesStartIndex = range.find("\n")+1

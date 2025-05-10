@@ -90,7 +90,7 @@ async def handleCommand(message: Message):
                                                          WikiParser.BIRTHS,
                                                          WikiParser.DEATHS,
                                                          WikiParser.HOLIDAYS],
-                                                         [12, 12, 12],
+                                                         [3, 3, 3],
                                                          5),
                                                          message)
 
@@ -125,7 +125,7 @@ async def handleText(message: Message):
 
 async def sendLargeText(text, messagesClass):
     if len(text) < MESSAGE_LENGTH_LIMIT:
-        await messagesClass.answer(message)
+        await messagesClass.answer(text)
         return
 
     lastMessageStartIndex = len(text)
