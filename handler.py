@@ -10,6 +10,9 @@ import stores.StringStore as Strs
 import WikiParser
 import DataManager
 
+
+MESSAGE_LENGTH_LIMIT = 4096
+
 dp = Dispatcher()
 
 # Handle callbacks
@@ -87,7 +90,7 @@ async def handleCommand(message: Message):
                                                          WikiParser.BIRTHS,
                                                          WikiParser.DEATHS,
                                                          WikiParser.HOLIDAYS],
-                                                         [3, 8, 3],
+                                                         [12, 12, 12],
                                                          5),
                                                          message)
 
@@ -121,8 +124,23 @@ async def handleText(message: Message):
 
 
 async def sendLargeText(text, messagesClass):
-    for i in range(len(text) // 4096 + 1):
-        await messagesClass.answer(text[4096 * i:4096 * (i + 1)])
+    if len(text) < MESSAGE_LENGTH_LIMIT:
+        await messagesClass.answer(message)
+        return
+
+    lastMessageStartIndex = len(text)
+    messages = []
+    while True:
+        fragmentSize = lastMessageStartIndex if lastMessageStartIndex < MESSAGE_LENGTH_LIMIT else MESSAGE_LENGTH_LIMIT
+        fragment = text[lastMessageStartIndex - fragmentSize : lastMessageStartIndex]
+        charIndex = fragment.find('\n')
+        if charIndex > -1:
+            messages.append(text[lastMessageStartIndex - fragmentSize + charIndex : lastMessageStartIndex])
+            lastMessageStartIndex = lastMessageStartIndex - fragmentSize + charIndex
+        else: break
+    for message in reversed(messages):
+        await messagesClass.answer(message)
+        
 
 def getPreferencesRaw(userId) -> str:
     return f'''
