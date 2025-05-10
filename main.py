@@ -4,9 +4,10 @@ from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from os import getenv
 
-from handler import dp
+from handler import dp, setBotClass
 from logger import Logger
 import DataManager
+import scheduler
 
 TOKEN = getenv("TIH365TOKEN")
 
@@ -14,7 +15,9 @@ TOKEN = getenv("TIH365TOKEN")
 async def main():
     Logger.info("\n\n\n\n\nScript started")
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+    setBotClass(bot)
     asyncio.create_task(DataManager.autoSaveTask())
+    asyncio.create_task(scheduler.timerTask())
     await dp.start_polling(bot)
 
 

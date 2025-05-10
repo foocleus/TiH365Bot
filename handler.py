@@ -14,6 +14,7 @@ import DataManager
 MESSAGE_LENGTH_LIMIT = 4096
 
 dp = Dispatcher()
+bot = None
 
 # Handle callbacks
 @dp.callback_query()
@@ -122,10 +123,26 @@ async def handleText(message: Message):
     else:
         await message.answer(Strs.get(Strs.ERR_NOT_TEXT_INPUT))
 
+def setBotClass(botClass):
+    global bot
+    bot = botClass
 
-async def sendLargeText(text, messagesClass):
+async def sendScheduledMessages(userIds):
+    page = WikiParser.getTodayPage()
+    for id in userIds:
+        await sendLargeText(WikiParser.getPageEvents(page,
+                                                     DataManager.get("selectedSections", id),
+                                                     DataManager.get("entriesPerRange", id),
+                                                     DataManager.get("holidaysEntries", id)), bot, id)
+
+
+async def sendLargeText(text, messagesClass, userId=0):
     if len(text) < MESSAGE_LENGTH_LIMIT:
-        await messagesClass.answer(text)
+        if userId != 0:
+            await messagesClass.send_message(chat_id=userId, text=text)
+        else:
+            await messagesClass.answer(text)
+        
         return
 
     lastMessageStartIndex = len(text)
@@ -139,7 +156,10 @@ async def sendLargeText(text, messagesClass):
             lastMessageStartIndex = lastMessageStartIndex - fragmentSize + charIndex
         else: break
     for message in reversed(messages):
-        await messagesClass.answer(message)
+        if userId != 0:
+            await messagesClass.send_message(chat_id=userId, text=message)
+        else:
+            await messagesClass.answer(message)
         
 
 def getPreferencesRaw(userId) -> str:

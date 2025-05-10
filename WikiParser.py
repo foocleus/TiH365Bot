@@ -30,16 +30,19 @@ RANGES = ["=== Pre-1600 ===", "=== 1601-1900 ===", "=== 1901_Present ==="]
 def setLanguage(lang):
     pass
 
-def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
+def getPage(date : str): 
+    month, day = date.split(".")
+    month, day = int(month), int(day)
+    try: 
+        return wikipedia.page(f"{months_full_names[month]} {day}", auto_suggest=False)
+    except Exception.__name__ as ename:
+        Logger.error(ename)
+
+def getTodayPage():
+    return getPage(wikipedia.datetime.now().strftime("%m.%d"))
+
+def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
     message = ""
-    def getPage(date : str): 
-        month, day = date.split(".")
-        month, day = int(month), int(day)
-        try: 
-            return wikipedia.page(f"{months_full_names[month]} {day}", auto_suggest=False)
-        except Exception.__name__ as ename:
-            Logger.error(ename)
-    
     def splitContent(content : str):
         sectionsRaw = content.split(SECTION_SPLITTER)
         sectionsRaw = sectionsRaw[CONTENT_START_INDEX : CONTENT_END_INDEX]
@@ -100,7 +103,6 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
 
         return entriesFinal
 
-    page = getPage(date)
     for section in splitContent(page.content):
         headerEndIndex = section.find("/b>")+3
         message += section[:headerEndIndex]
@@ -125,6 +127,9 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
 
     message += f"\n🔗 Source: <a href=\"{page.url}\">Wikipedia</a>"
     return message
+
+def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
+    return getPageEvents(getPage(date), selectedSections, entriesPerRange, holidaysEntries)
 
 def getTodayEvents(selectedSections, entriesPerRange, holidaysEntries):
     return getDayEvents(wikipedia.datetime.now().strftime("%m.%d"), selectedSections, entriesPerRange, holidaysEntries)
