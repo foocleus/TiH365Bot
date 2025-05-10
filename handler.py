@@ -90,7 +90,7 @@ async def handleCommand(message: Message):
                                                          WikiParser.BIRTHS,
                                                          WikiParser.DEATHS,
                                                          WikiParser.HOLIDAYS],
-                                                         [3, 3, 3],
+                                                         [12, 12, 12],
                                                          5),
                                                          message)
 

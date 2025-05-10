@@ -59,7 +59,7 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
         rangesRaw = content.split(RANGE_SPLITTER)
         rangesFinal = []
         for range in rangesRaw:
-            entriesStartIndex = range.find("\n")+1
+            entriesStartIndex = range.find("\n")
             rangesFinal.append(range[entriesStartIndex:])
         return rangesFinal
     
