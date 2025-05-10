@@ -15,6 +15,8 @@ BIRTHS = "Births =="
 DEATHS = "Deaths =="
 HOLIDAYS = "Holidays and observances =="
 
+WIKIPEDIA_HYPERLINK = "https://en.wikipedia.org/wiki/"
+
 headers = {
     "Events ==" : "\n<b>Historical events that happened today:</b>",
     "Births ==" : "\n<b>Famous people born today:</b>",
@@ -90,7 +92,7 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
                 nameStartIndex = entry.find(" – ")+3
                 nameEndIndex = entry.find(", ", nameStartIndex)
                 name = entry[nameStartIndex:nameEndIndex]
-                url = f"https://en.wikipedia.org/wiki/{name}"
+                url = WIKIPEDIA_HYPERLINK + name
             except:
                 entriesFinal.append(entry)
             else:

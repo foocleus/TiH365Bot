@@ -4,10 +4,15 @@ import json
 from copy import deepcopy
 
 from logger import Logger
+from WikiParser import EVENTS, BIRTHS, DEATHS, HOLIDAYS
 
 defaultValues = {
     "lang": "EN",
-    "isActivated": False
+    "isActivated": False,
+    "scheduledHour" : 9,
+    "selectedSections": [EVENTS, BIRTHS, DEATHS, HOLIDAYS],
+    "entriesPerRange": [3, 3, 3],
+    "holidaysEntries": 5
 }
 userData = {}
 
