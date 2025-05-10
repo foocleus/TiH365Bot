@@ -107,7 +107,10 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
         for range in splitSection(section):
             entries = splitEntries(range)
             if len(entries) <= entriesPerRange[ri]:
-                message += "\n".join(entries)
+                if headerEndIndex != len(headers["Events =="]):
+                    message += "\n".join(addLinksToEntries(entries))
+                else:
+                    message += "\n".join(entries)
             else:
                 if headerEndIndex == len(headers["Events =="]):
                     message += "\n" + "\n".join(sortEntries(sample(entries, entriesPerRange[ri])))
