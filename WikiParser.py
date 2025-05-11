@@ -31,15 +31,15 @@ def setLanguage(lang):
     pass
 
 def getPage(date : str): 
-    month, day = date.split(".")
-    month, day = int(month), int(day)
     try: 
+        day, month = date.split(".")
+        day, month = int(day), int(month)
         return wikipedia.page(f"{months_full_names[month]} {day}", auto_suggest=False)
-    except Exception.__name__ as ename:
-        Logger.error(ename)
+    except:
+        return False
 
 def getTodayPage():
-    return getPage(wikipedia.datetime.now().strftime("%m.%d"))
+    return getPage(wikipedia.datetime.now().strftime("%d.%m"))
 
 def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
     message = ""
@@ -132,6 +132,6 @@ def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
     return getPageEvents(getPage(date), selectedSections, entriesPerRange, holidaysEntries)
 
 def getTodayEvents(selectedSections, entriesPerRange, holidaysEntries):
-    return getDayEvents(wikipedia.datetime.now().strftime("%m.%d"), selectedSections, entriesPerRange, holidaysEntries)
+    return getDayEvents(wikipedia.datetime.now().strftime("%d.%m"), selectedSections, entriesPerRange, holidaysEntries)
 
 #getTodayEvents([EVENTS, BIRTHS, DEATHS, HOLIDAYS], [2, 8, 2], 5)

@@ -94,7 +94,8 @@ async def handleCommand(message: Message):
                                                          [12, 12, 12],
                                                          5),
                                                          message)
-
+            case CommandStore.EVENTSTHATDAY.command:
+                await message.answer(Strs.get(Strs.INF_SELECT_DATE))
             case CommandStore.EVENTSTHATDAY.command:
                 pass
             case CommandStore.EVENTSTHATDAYALL.command:
@@ -115,13 +116,17 @@ async def handleText(message: Message):
         if not DataManager.get("isActivated", userId):
             message.answer("Finish setup before using the bot functionality") 
             return 
-        match message.text:
-            case ButtonStore.reply.askLargerNum.text:
-                await message.answer(str(randint(0, 255*255)))
-            case _:
-                await message.send_copy(userId, reply_markup=KeyboardStore.inline.echo)
+        page = WikiParser.getPage(message.text)
+        if not page: 
+            await message.answer(Strs.get(Strs.ERR_INVALID_DATE)) 
+            return
+        await sendLargeText(WikiParser.getPageEvents(page,
+                                                    DataManager.get("selectedSections", userId),
+                                                    DataManager.get("entriesPerRange", userId),
+                                                    DataManager.get("holidaysEntries", userId)), message)
     else:
         await message.answer(Strs.get(Strs.ERR_NOT_TEXT_INPUT))
+
 
 def setBotClass(botClass):
     global bot

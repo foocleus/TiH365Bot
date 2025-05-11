@@ -3,6 +3,7 @@
         "ERR_SOMETHING_WRONG": "\u274c Something went wrong",
         "ERR_COMMAND_NOT_EXIST": "\u274c Such command doesn't exist. Please open the menu to see available commands",
         "ERR_NOT_TEXT_INPUT": "\u274c Bot supports only text commands. Please open the menu to see available text commands",
+        "ERR_INVALID_DATE": "\u274c Invalid date input use <code>day.month</code> format",
 
         "BUT_ECHO_UPPER": "Upper text",
         "BUT_ECHO_CAPITALIZE": "Capitalize text",
@@ -20,6 +21,7 @@
         "INF_HELP_HEADER": "\ud83d\udcc3 Here is the list of all available commands:\n\n",
         "INF_TUTOR_NOTICE": "\n\u2139 <b>You can open this list any time by typing</b> /help",
         "INF_PREFERENCES": "\u2699 <b>Preferences</b>",
+        "INF_SELECT_DATE": "Enter the date for events in <code>day.month</code> format, e.g., <code>03.01</code>, which stands for January 3rd:",
 
         "PRO_RESTART": "<b>\u26a0 Are you sure you want to continue? Continuation of this action will result in DELETION OF ALL OF YOUR PREFERENCE</b>",
 
