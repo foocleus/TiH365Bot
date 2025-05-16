@@ -26,6 +26,8 @@ with open("./user-data.json", "r") as dataFile:
 
 def get(entry, userId):
     if type(userId) == int: userId = str(userId)
+    if not userId in userData:
+        return defaultValues[entry]
     return userData[userId].get(entry, defaultValues[entry])
     
 def getIdsByValue(entry, value):

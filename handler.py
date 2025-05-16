@@ -109,7 +109,7 @@ async def handleCommand(message: Message):
                                                          WikiParser.DEATHS,
                                                          WikiParser.HOLIDAYS],
                                                          [12, 12, 12],
-                                                         5),
+                                                         25),
                                                          message)
             case CommandStore.EVENTSTHATDAY.command:
                 await message.answer(Strs.get(Strs.INF_SELECT_DATE))
