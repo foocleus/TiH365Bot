@@ -111,6 +111,12 @@ def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
                 entriesFinal.append(entry[:nameStartIndex] + f"<a href=\"{url}\">" + name + "</a>" + entry[nameEndIndex:]) 
 
         return entriesFinal
+    
+    def safeSample(values, number):
+        if len(values) <= number:
+            return values
+        else:
+            return sample(values, number)
 
     for section in splitContent(page.content):
         headerEndIndex = section.find("/b>")+3
@@ -119,18 +125,12 @@ def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
         ri = 0 # range index
         for range in splitSection(section):
             entries = filterEntries(splitRanges(range))
-            if len(entries) <= entriesPerRange[ri]:
-                if headerEndIndex != len(headers["Events =="]):
-                    message += "\n".join(addLinksToEntries(entries))
-                else:
-                    message += "\n".join(entries)
+            if headerEndIndex == len(headers["Events =="]):
+                message += "\n" + "\n".join(sortEntries(safeSample(entries, entriesPerRange[ri])))
+            elif headerEndIndex == len(headers["Holidays and observances =="]):
+                message += "\n" + "\n".join(safeSample(entries, holidaysEntries))
             else:
-                if headerEndIndex == len(headers["Events =="]):
-                    message += "\n" + "\n".join(sortEntries(sample(entries, entriesPerRange[ri])))
-                elif headerEndIndex == len(headers["Holidays and observances =="]):
-                    message += "\n" + "\n".join(sample(entries, holidaysEntries))
-                else:
-                    message += "\n" + "\n".join(addLinksToEntries(sortEntries(sample(entries, entriesPerRange[ri]))))
+                message += "\n" + "\n".join(addLinksToEntries(sortEntries(safeSample(entries, entriesPerRange[ri]))))
             message += "\n"
             ri += 1
 

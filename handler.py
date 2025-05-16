@@ -108,7 +108,7 @@ async def handleCommand(message: Message):
                                                          WikiParser.BIRTHS,
                                                          WikiParser.DEATHS,
                                                          WikiParser.HOLIDAYS],
-                                                         [12, 12, 12],
+                                                         [24, 24, 24],
                                                          25),
                                                          message)
             case CommandStore.EVENTSTHATDAY.command:
