@@ -1,6 +1,7 @@
-from aiogram.utils.keyboard import ReplyKeyboardMarkup, InlineKeyboardMarkup
+from aiogram.utils.keyboard import ReplyKeyboardMarkup, InlineKeyboardMarkup, KeyboardButton, InlineKeyboardButton
+from . import CallbackStore
+import stores.StringStore as Strs
 
-from . import ButtonStore
 
 inline, reply = None, None
 
@@ -19,30 +20,34 @@ class Reply:
 def refreshLocale():
     global inline, reply
 
-    ButtonStore.refreshLocale()
     inline = Inline(
-        echo = InlineKeyboardMarkup(inline_keyboard=[
-            [ButtonStore.inline.echoUpper],
-            [ButtonStore.inline.echoCapitalize]
-        ]),
         language = InlineKeyboardMarkup(inline_keyboard=[
-            [ButtonStore.inline.languageEnglish],
-            [ButtonStore.inline.languageRouter],
+            [InlineKeyboardButton(text="🇺🇸/🇬🇧 English", callback_data=CallbackStore.LANGUAGE_ENGLISH)],
+            [InlineKeyboardButton(text="📻 router", callback_data=CallbackStore.LANGUAGE_ROUTER)],
         ]),
         tutorial = InlineKeyboardMarkup(inline_keyboard=[
-            [ButtonStore.inline.tutorialFinish],
+            [InlineKeyboardButton(text=Strs.get(Strs.BUT_TUTOR_FINISH), callback_data=CallbackStore.TUTORIAL_FINISH)],
         ]),
         restart = InlineKeyboardMarkup(inline_keyboard=[
-            [ButtonStore.inline.restartContinue],
-            [ButtonStore.inline.restartCancel],
+            [InlineKeyboardButton(text=Strs.get(Strs.BUT_RESTART_CONTINUE), callback_data=CallbackStore.RESTART_CONTINUE)],
+            [InlineKeyboardButton(text=Strs.get(Strs.BUT_RESTART_CANCEL), callback_data=CallbackStore.RESTART_CANCEL)],
         ]),
         preferences = InlineKeyboardMarkup(inline_keyboard=[
-            [ButtonStore.inline.preferencesLanguage],
+            [InlineKeyboardButton(text=Strs.get(Strs.PRF_LANGUAGE), callback_data=CallbackStore.PREFERENCES_LANGUAGE)],
+            [InlineKeyboardButton(text=Strs.get(Strs.PRF_SECTIONS), callback_data=CallbackStore.PREFERENCES_SECTIONS)],
+            [InlineKeyboardButton(text=Strs.get(Strs.PRF_ENTRIES), callback_data=CallbackStore.PREFERENCES_ENTRIES)],
+            [InlineKeyboardButton(text=Strs.get(Strs.PRF_TIME), callback_data=CallbackStore.PREFERENCES_TIME)],
+        ]),
+        preferencesSections = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text=Strs.get(Strs.BUT_SECTION_EVENTS), callback_data=CallbackStore.TOGGLE_SECTION_EVENTS)],
+            [InlineKeyboardButton(text=Strs.get(Strs.BUT_SECTION_BIRTHS), callback_data=CallbackStore.TOGGLE_SECTION_BIRTHS)],
+            [InlineKeyboardButton(text=Strs.get(Strs.BUT_SECTION_DEATHS), callback_data=CallbackStore.TOGGLE_SECTION_DEATHS)],
+            [InlineKeyboardButton(text=Strs.get(Strs.BUT_SECTION_HOLIDAYS), callback_data=CallbackStore.TOGGLE_SECTION_HOLIDAYS)],
         ]),
     )
-    reply = Reply(
-        rndCommand = ReplyKeyboardMarkup(one_time_keyboard=True, keyboard=[
-            [ButtonStore.reply.askLargerNum]
-        ]),
-    )   
+    # reply = Reply(
+    #     rndCommand = ReplyKeyboardMarkup(one_time_keyboard=True, keyboard=[
+    #         [ButtonStore.reply.askLargerNum]
+    #     ]),
+    # )   
 

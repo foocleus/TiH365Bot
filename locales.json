@@ -10,6 +10,10 @@
         "BUT_TUTOR_FINISH": "\u25b6 Start using bot",
         "BUT_RESTART_CONTINUE": "\ud83d\uddd1 Continue",
         "BUT_RESTART_CANCEL": "\u2b05 Cancel and go back",
+        "BUT_SECTION_EVENTS": "Toggle Events",
+        "BUT_SECTION_BIRTHS": "Toggle Births",
+        "BUT_SECTION_DEATHS": "Toggle Deaths",
+        "BUT_SECTION_HOLIDAYS": "Toggle Holidays and observances",
         
         "COM_START": "Resets all preferences",
         "COM_HELP": "Sends list of all available commands",
@@ -22,10 +26,18 @@
         "INF_TUTOR_NOTICE": "\n\u2139 <b>You can open this list any time by typing</b> /help",
         "INF_PREFERENCES": "\u2699 <b>Preferences</b>",
         "INF_SELECT_DATE": "Enter the date for events in <code>day.month</code> format, e.g., <code>03.01</code>, which stands for January 3rd:",
+        "INF_SECTIONS" : "\ud83d\udccd <b>Sections</b>",
 
         "PRO_RESTART": "<b>\u26a0 Are you sure you want to continue? Continuation of this action will result in DELETION OF ALL OF YOUR PREFERENCE</b>",
 
-        "PRF_LANGUAGE": "\n\ud83c\uddfa\ud83c\uddf3 Language"
+        "PRF_LANGUAGE": "\n\ud83c\uddfa\ud83c\uddf3 Language",
+        "PRF_SECTIONS": "\ud83d\udccd Sections",
+        "PRF_ENTRIES": "\u2712 Entries per period",
+        "PRF_TIME": "\u23f0 Send scheduled message at",
+        "PRF_SECTION_EVENTS": "Events",
+        "PRF_SECTION_BIRTHS": "Births",
+        "PRF_SECTION_DEATHS": "Deaths",
+        "PRF_SECTION_HOLIDAYS": "Holidays and observances"
     },
     "RR": {
         "ERR_SOMETHING_WRONG": "\u274c router",
