@@ -97,6 +97,9 @@ async def handleCommand(message: Message):
         if not isActivated and message.text[1:] != CommandStore.START.command:
             await message.answer("Finish setup before using the bot functionality") 
             return 
+        if DataManager.get("currentInput", userId) is not None:
+            await message.answer(Strs.get(Strs.ERR_UNFINISHED_INPUT)) 
+            return 
         match message.text[1:]:
             case CommandStore.START.command:
                 if isActivated: 
@@ -151,7 +154,7 @@ async def handleText(message: Message):
                         await message.answer(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
                 DataManager.set("currentInput", None, userId)
             except:
-                await message.answer(Strs.get(Strs.ERR_INVALID_DATE))
+                await message.answer(Strs.get(Strs.ERR_INVALID_FORMAT))
             return
         page = WikiParser.getPage(message.text)
         if not page: 
