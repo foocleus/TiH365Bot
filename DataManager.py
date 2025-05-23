@@ -12,7 +12,8 @@ defaultValues = {
     "scheduledHour" : 9,
     "selectedSections": [EVENTS, BIRTHS, DEATHS, HOLIDAYS],
     "entriesPerRange": [3, 3, 3],
-    "holidaysEntries": 5
+    "holidaysEntries": 5,
+    "currentInput" : None
 }
 userData = {}
 

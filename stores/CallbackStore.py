@@ -18,3 +18,8 @@ TOGGLE_SECTION_EVENTS = "toggleEvents =="
 TOGGLE_SECTION_BIRTHS = "toggleBirths =="
 TOGGLE_SECTION_DEATHS = "toggleDeaths =="
 TOGGLE_SECTION_HOLIDAYS = "toggleHolidays and observances =="
+
+INPUT_ENTRIES_PRE1600 = "input0"
+INPUT_ENTRIES_1601_1900 = "input1"
+INPUT_ENTRIES_MODERN = "input2"
+INPUT_ENTRIES_HOLIDAYS = "input3"

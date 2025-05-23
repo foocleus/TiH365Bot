@@ -1,4 +1,4 @@
-from random import randint
+#from random import randint
 #import asyncio
 from aiogram import Dispatcher
 #from aiogram.filters import CommandStart, Command
@@ -17,6 +17,7 @@ PREF_MAIN = "PREF_MAIN"
 PREF_LANGUAGE = "PREF_LANGUAGE"
 PREF_SECTIONS = "PREF_SECTIONS"
 PREF_ENTRIES = "PREF_ENTRIES"
+PREF_ENTRIES_INPUT = "PREF_ENTRIES_INPUT"
 PREF_TIME = "PREF_TIME"
 
 dp = Dispatcher()
@@ -53,6 +54,9 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 selectedSections.append(sectionName)
             DataManager.set("selectedSections", selectedSections, userId)
             await callbackQuery.message.edit_text(assembleMenuText(PREF_SECTIONS, userId), reply_markup=KeyboardStore.inline.preferencesSections)
+        elif callbackQuery.data[:5] == "input":
+            DataManager.set("currentInput", int(callbackQuery.data[5:]), userId)
+            await callbackQuery.message.edit_text(assembleMenuText(PREF_ENTRIES_INPUT, userId))
         else:
             match callbackQuery.data:
                 case CallbackStore.ECHO_UPPER:
@@ -63,13 +67,9 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 case CallbackStore.TUTORIAL_FINISH:
                     await callbackQuery.message.edit_reply_markup(None)
                     DataManager.set("isActivated", True, userId)
-                    await sendLargeText(WikiParser.getTodayEvents([WikiParser.EVENTS,
-                                                             WikiParser.BIRTHS,
-                                                             WikiParser.DEATHS,
-                                                             WikiParser.HOLIDAYS],
-                                                             [3, 3, 3],
-                                                             5),
-                                                             callbackQuery.message)
+                    await sendLargeText(WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
+                                                                DataManager.get("entriesPerRange", userId),
+                                                                DataManager.get("holidaysEntries", userId)), callbackQuery.message)
                     
                 case CallbackStore.RESTART_CONTINUE:
                     DataManager.set("isActivated", False, userId)
@@ -81,6 +81,8 @@ async def handleCallback(callbackQuery: CallbackQuery):
                     await callbackQuery.message.edit_text("Select your language:", reply_markup=KeyboardStore.inline.language)
                 case CallbackStore.PREFERENCES_SECTIONS:
                     await callbackQuery.message.edit_text(assembleMenuText(PREF_SECTIONS, userId), reply_markup=KeyboardStore.inline.preferencesSections)
+                case CallbackStore.PREFERENCES_ENTRIES:
+                    await callbackQuery.message.edit_text(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
                 case _:
                     await callbackQuery.answer(Strs.get(Strs.ERR_SOMETHING_WRONG))
             
@@ -104,13 +106,9 @@ async def handleCommand(message: Message):
             case CommandStore.HELP.command:
                 await message.answer(Strs.get(Strs.INF_HELP_HEADER) + CommandStore.listCommandInfo())
             case CommandStore.EVENTSTODAY.command:
-                await sendLargeText(WikiParser.getTodayEvents([WikiParser.EVENTS,
-                                                         WikiParser.BIRTHS,
-                                                         WikiParser.DEATHS,
-                                                         WikiParser.HOLIDAYS],
-                                                         [24, 24, 24],
-                                                         25),
-                                                         message)
+                await sendLargeText(WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
+                                                            DataManager.get("entriesPerRange", userId),
+                                                            DataManager.get("holidaysEntries", userId)), message)
             case CommandStore.EVENTSTHATDAY.command:
                 await message.answer(Strs.get(Strs.INF_SELECT_DATE))
             case CommandStore.EVENTSTHATDAY.command:
@@ -132,7 +130,22 @@ async def handleText(message: Message):
     if message.content_type == ContentType.TEXT:
         if not DataManager.get("isActivated", userId):
             message.answer("Finish setup before using the bot functionality") 
-            return 
+            return
+        currentInput = DataManager.get("currentInput", userId)
+        if currentInput != None:
+            try:
+                match currentInput:
+                    case 0 | 1 | 2:
+                        updatedEntriesPerRange = DataManager.get("entriesPerRange", userId)
+                        updatedEntriesPerRange[currentInput] = int(message.text)
+                        DataManager.set("entriesPerRange", updatedEntriesPerRange, userId)
+                    case 3:
+                        DataManager.set("holidaysEntries", int(message.text), userId)
+                DataManager.set("currentInput", None, userId)
+                await message.answer(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
+            except:
+                await message.answer(Strs.get(Strs.ERR_INVALID_DATE))
+            return
         page = WikiParser.getPage(message.text)
         if not page: 
             await message.answer(Strs.get(Strs.ERR_INVALID_DATE)) 
@@ -187,19 +200,33 @@ async def sendLargeText(text, messagesClass, userId=0):
 def assembleMenuText(menuName, userId) -> str:
     formattedSelectedSections = str(DataManager.get("selectedSections", userId))[2:-5].split(" ==', '")
     formattedEntriesPerRange = [str(i) for i in DataManager.get("entriesPerRange", userId)]
+    holidaysEntries = DataManager.get("holidaysEntries", userId)
     match menuName:
         case "PREF_MAIN":
             return f'''
 {Strs.get(Strs.INF_PREFERENCES)}
 {Strs.get(Strs.PRF_LANGUAGE)} - <code>{DataManager.get("lang", userId)}</code>
 {Strs.get(Strs.PRF_SECTIONS)} - <code>{", ".join(formattedSelectedSections)}</code>
-{Strs.get(Strs.PRF_ENTRIES)} - <code>{", ".join(formattedEntriesPerRange)}</code>
+{Strs.get(Strs.PRF_ENTRIES)} - <code>{", ".join(formattedEntriesPerRange) + f", {holidaysEntries}"}</code>
 {Strs.get(Strs.PRF_TIME)} - <code>{DataManager.get("scheduledHour", userId)}:00</code>
-                    ''' 
+                    '''
         case "PREF_SECTIONS":
             return f'''
+{Strs.get(Strs.INF_SECTIONS)}
 {"✔" if formattedSelectedSections.count(Strs.get(Strs.PRF_SECTION_EVENTS)) > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_EVENTS)}
 {"✔" if formattedSelectedSections.count(Strs.get(Strs.PRF_SECTION_BIRTHS)) > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_BIRTHS)}
 {"✔" if formattedSelectedSections.count(Strs.get(Strs.PRF_SECTION_DEATHS)) > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_DEATHS)}
 {"✔" if formattedSelectedSections.count(Strs.get(Strs.PRF_SECTION_HOLIDAYS)) > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_HOLIDAYS)}
+                    ''' 
+        case "PREF_ENTRIES":
+            return f'''
+{Strs.get(Strs.INF_ENTRIES)}
+{Strs.get(Strs.PRF_ENTRIES_PRE1600)}: <code>{formattedEntriesPerRange[0]}</code>
+{Strs.get(Strs.PRF_ENTRIES_1601_1900)}: <code>{formattedEntriesPerRange[1]}</code>
+{Strs.get(Strs.PRF_ENTRIES_MODERN)}: <code>{formattedEntriesPerRange[2]}</code>
+{Strs.get(Strs.PRF_ENTRIES_MODERN)}: <code>{holidaysEntries}</code>
+                    ''' 
+        case "PREF_ENTRIES_INPUT":
+            return f'''
+{Strs.get(Strs.PRF_ENTRIES_INPUT)}
                     ''' 
