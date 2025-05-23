@@ -5,8 +5,6 @@
         "ERR_NOT_TEXT_INPUT": "\u274c Bot supports only text commands. Please open the menu to see available text commands",
         "ERR_INVALID_DATE": "\u274c Invalid date input use <code>day.month</code> format",
 
-        "BUT_ECHO_UPPER": "Upper text",
-        "BUT_ECHO_CAPITALIZE": "Capitalize text",
         "BUT_TUTOR_FINISH": "\u25b6 Start using bot",
         "BUT_RESTART_CONTINUE": "\ud83d\uddd1 Continue",
         "BUT_RESTART_CANCEL": "\u2b05 Cancel and go back",
@@ -18,6 +16,7 @@
         "BUT_ENTRIES_1601_1900": "Adjust the amount of 1601-1900 entries per message",
         "BUT_ENTRIES_MODERN": "Adjust the amount of 1901-Present entries per message",
         "BUT_ENTRIES_HOLIDAYS": "Adjust the amount of Holidays and observances entries per message",
+        "BUT_PREFERENCES_GO_BACK": "\u2b05 Go back",
         
         "COM_START": "Resets all preferences",
         "COM_HELP": "Sends list of all available commands",

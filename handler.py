@@ -44,7 +44,7 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 DataManager.set("lang", language, userId)
                 Strs.setLocaleById(userId)
                 KeyboardStore.refreshLocale()
-                await callbackQuery.message.edit_text(assembleMenuText(PREF_SECTIONS, userId), reply_markup=KeyboardStore.inline.preferences)
+                await callbackQuery.message.edit_text(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
         elif callbackQuery.data[:6] == "toggle":
             sectionName = callbackQuery.data[6:]
             selectedSections = DataManager.get("selectedSections", userId)
@@ -59,11 +59,6 @@ async def handleCallback(callbackQuery: CallbackQuery):
             await callbackQuery.message.edit_text(assembleMenuText(PREF_ENTRIES_INPUT, userId))
         else:
             match callbackQuery.data:
-                case CallbackStore.ECHO_UPPER:
-                    await callbackQuery.message.edit_text(callbackQuery.message.text.upper())
-                case CallbackStore.ECHO_CAPITALIZE:
-                    await callbackQuery.message.edit_text(callbackQuery.message.text.capitalize())
-
                 case CallbackStore.TUTORIAL_FINISH:
                     await callbackQuery.message.edit_reply_markup(None)
                     DataManager.set("isActivated", True, userId)
@@ -76,7 +71,9 @@ async def handleCallback(callbackQuery: CallbackQuery):
                     await callbackQuery.message.edit_text("Select your language:", reply_markup=KeyboardStore.inline.language)
                 case CallbackStore.RESTART_CANCEL:
                     await callbackQuery.message.delete()
-
+                
+                case CallbackStore.PREFERENCES_MAIN:
+                    await callbackQuery.message.edit_text(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
                 case CallbackStore.PREFERENCES_LANGUAGE:
                     await callbackQuery.message.edit_text("Select your language:", reply_markup=KeyboardStore.inline.language)
                 case CallbackStore.PREFERENCES_SECTIONS:

@@ -43,12 +43,14 @@ def refreshLocale():
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_SECTION_BIRTHS), callback_data=CallbackStore.TOGGLE_SECTION_BIRTHS)],
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_SECTION_DEATHS), callback_data=CallbackStore.TOGGLE_SECTION_DEATHS)],
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_SECTION_HOLIDAYS), callback_data=CallbackStore.TOGGLE_SECTION_HOLIDAYS)],
+            [InlineKeyboardButton(text=Strs.get(Strs.BUT_PREFERENCES_GO_BACK), callback_data=CallbackStore.PREFERENCES_MAIN)],
         ]),
         preferencesEntries = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_ENTRIES_PRE1600), callback_data=CallbackStore.INPUT_ENTRIES_PRE1600)],
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_ENTRIES_1601_1900), callback_data=CallbackStore.INPUT_ENTRIES_1601_1900)],
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_ENTRIES_MODERN), callback_data=CallbackStore.INPUT_ENTRIES_MODERN)],
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_ENTRIES_HOLIDAYS), callback_data=CallbackStore.INPUT_ENTRIES_HOLIDAYS)],
+            [InlineKeyboardButton(text=Strs.get(Strs.BUT_PREFERENCES_GO_BACK), callback_data=CallbackStore.PREFERENCES_MAIN)],
         ]),
     )
     # reply = Reply(
