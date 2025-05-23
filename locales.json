@@ -12,10 +12,10 @@
         "BUT_SECTION_BIRTHS": "Toggle Births section",
         "BUT_SECTION_DEATHS": "Toggle Deaths section",
         "BUT_SECTION_HOLIDAYS": "Toggle Holidays and observances section",
-        "BUT_ENTRIES_PRE1600": "Adjust the amount of Pre-1600 entries per message",
-        "BUT_ENTRIES_1601_1900": "Adjust the amount of 1601-1900 entries per message",
-        "BUT_ENTRIES_MODERN": "Adjust the amount of 1901-Present entries per message",
-        "BUT_ENTRIES_HOLIDAYS": "Adjust the amount of Holidays and observances entries per message",
+        "BUT_ENTRIES_PRE1600": "Adjust the number of Pre-1600 entries per message",
+        "BUT_ENTRIES_1601_1900": "Adjust the number of 1601-1900 entries per message",
+        "BUT_ENTRIES_MODERN": "Adjust the number of 1901-Present entries per message",
+        "BUT_ENTRIES_HOLIDAYS": "Adjust the number of Holidays and observances entries per message",
         "BUT_PREFERENCES_GO_BACK": "\u2b05 Go back",
         
         "COM_START": "Resets all preferences",
@@ -29,6 +29,8 @@
         "INF_TUTOR_NOTICE": "\n\u2139 <b>You can open this list any time by typing</b> /help",
         "INF_PREFERENCES": "\u2699 <b>Preferences</b>",
         "INF_SELECT_DATE": "Enter the date for events in <code>day.month</code> format, e.g., <code>03.01</code>, which stands for January 3rd:",
+        "INF_ENTRIES_INPUT": "Enter the number of entries for this period: ",
+        "INF_TIME_INPUT": "Enter the hour to send the scheduled message: ",
         "INF_SECTIONS" : "\ud83d\udccd <b>Sections</b>",
         "INF_ENTRIES" : "\u2712 <b>Entries per period</b>",
 
@@ -42,7 +44,6 @@
         "PRF_SECTION_BIRTHS": "Births",
         "PRF_SECTION_DEATHS": "Deaths",
         "PRF_SECTION_HOLIDAYS": "Holidays and observances",
-        "PRF_ENTRIES_INPUT": "Enter number of entries for this period: ",
         "PRF_ENTRIES_PRE1600": "Pre-1600",
         "PRF_ENTRIES_1601_1900": "1601-1900",
         "PRF_ENTRIES_MODERN": "1901-Present"

@@ -18,7 +18,7 @@ PREF_LANGUAGE = "PREF_LANGUAGE"
 PREF_SECTIONS = "PREF_SECTIONS"
 PREF_ENTRIES = "PREF_ENTRIES"
 PREF_ENTRIES_INPUT = "PREF_ENTRIES_INPUT"
-PREF_TIME = "PREF_TIME"
+PREF_TIME_INPUT = "PREF_TIME_INPUT"
 
 dp = Dispatcher()
 bot = None
@@ -80,6 +80,9 @@ async def handleCallback(callbackQuery: CallbackQuery):
                     await callbackQuery.message.edit_text(assembleMenuText(PREF_SECTIONS, userId), reply_markup=KeyboardStore.inline.preferencesSections)
                 case CallbackStore.PREFERENCES_ENTRIES:
                     await callbackQuery.message.edit_text(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
+                case CallbackStore.PREFERENCES_TIME:
+                    DataManager.set("currentInput", 4, userId)
+                    await callbackQuery.message.edit_text(assembleMenuText(PREF_TIME_INPUT, userId))
                 case _:
                     await callbackQuery.answer(Strs.get(Strs.ERR_SOMETHING_WRONG))
             
@@ -133,13 +136,20 @@ async def handleText(message: Message):
             try:
                 match currentInput:
                     case 0 | 1 | 2:
+                        if not message.text.isnumeric(): raise Exception()
                         updatedEntriesPerRange = DataManager.get("entriesPerRange", userId)
                         updatedEntriesPerRange[currentInput] = int(message.text)
                         DataManager.set("entriesPerRange", updatedEntriesPerRange, userId)
+                        await message.answer(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
                     case 3:
+                        if not message.text.isnumeric(): raise Exception()
                         DataManager.set("holidaysEntries", int(message.text), userId)
+                        await message.answer(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
+                    case 4:
+                        if not message.text.isnumeric() or int(message.text) > 23: raise Exception()
+                        DataManager.set("scheduledHour", int(message.text), userId)
+                        await message.answer(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
                 DataManager.set("currentInput", None, userId)
-                await message.answer(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
             except:
                 await message.answer(Strs.get(Strs.ERR_INVALID_DATE))
             return
@@ -225,5 +235,9 @@ def assembleMenuText(menuName, userId) -> str:
                     ''' 
         case "PREF_ENTRIES_INPUT":
             return f'''
-{Strs.get(Strs.PRF_ENTRIES_INPUT)}
+{Strs.get(Strs.INF_ENTRIES_INPUT)}
                     ''' 
+        case "PREF_TIME_INPUT":
+            return f'''
+{Strs.get(Strs.INF_TIME_INPUT)}
+                    '''
