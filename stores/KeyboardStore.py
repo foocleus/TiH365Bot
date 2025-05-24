@@ -23,7 +23,7 @@ def refreshLocale():
     inline = Inline(
         language = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="🇺🇸/🇬🇧 English", callback_data=CallbackStore.LANGUAGE_ENGLISH)],
-            [InlineKeyboardButton(text="📻 router", callback_data=CallbackStore.LANGUAGE_ROUTER)],
+            #[InlineKeyboardButton(text="📻 router", callback_data=CallbackStore.LANGUAGE_ROUTER)],
         ]),
         tutorial = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_TUTOR_FINISH), callback_data=CallbackStore.TUTORIAL_FINISH)],

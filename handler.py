@@ -116,8 +116,6 @@ async def handleCommand(message: Message):
                 await message.answer(Strs.get(Strs.INF_SELECT_DATE))
             case CommandStore.EVENTSTHATDAY.command:
                 pass
-            case CommandStore.EVENTSTHATDAYALL.command:
-                pass
             case CommandStore.PREFERENCES.command | CommandStore.PREF.command:
                 await message.answer(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
             case _:
