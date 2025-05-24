@@ -104,6 +104,8 @@ def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
             try:
                 nameStartIndex = entry.find(" – ")+3
                 nameEndIndex = entry.find(", ", nameStartIndex)
+                if nameEndIndex < 0:
+                    nameEndIndex = entry.find(" (", nameStartIndex)
                 name = entry[nameStartIndex:nameEndIndex]
                 url = WIKIPEDIA_HYPERLINK + name
             except:
