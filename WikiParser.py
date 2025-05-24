@@ -24,7 +24,7 @@ headers = {
     "Holidays and observances ==" : "\n<b>Holidays around the globe today:</b>",
 }
 filters = [
-    "Christian feast day: "
+    "Christian feast day:"
 ]
 
 RANGES = ["=== Pre-1600 ===", "=== 1601-1900 ===", "=== 1901_Present ==="]
@@ -68,17 +68,17 @@ def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
         rangesFinal = []
         for range in rangesRaw:
             entriesStartIndex = range.find("\n")
-            rangesFinal.append(range[entriesStartIndex:])
+            rangesFinal.append(range[entriesStartIndex+1:])
         return rangesFinal
+    
+    def splitRanges(section):
+        return section.split("\n")
     
     def filterEntries(entries):
         for filter in filters:
             while entries.count(filter) > 0:
                 entries.remove(filter)
         return entries
-
-    def splitRanges(section):
-        return section.split("\n")
     
     def sortEntries(entries):
         def safeIntSort(iterable):
