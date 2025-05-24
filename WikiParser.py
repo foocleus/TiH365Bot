@@ -94,6 +94,7 @@ def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
             for entry in entries:
                 if entry.find(year) > -1:
                     sortedEntries.append(entry)
+                    entries.remove(entry)
                     break
         return sortedEntries
     
