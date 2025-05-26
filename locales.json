@@ -6,6 +6,7 @@
         "ERR_INVALID_DATE": "\u274c Invalid date input. Use <code>day.month</code> format",
         "ERR_INVALID_FORMAT": "\u274c Invalid input format. Enter only positive integers",
         "ERR_UNFINISHED_INPUT": "\u274c Finalize the preference setting before using the commands",
+        "ERR_WIKI_LIMIT": "\u274c You have reached the limit of wiki messages per 5 minutes",
 
         "BUT_TUTOR_FINISH": "\u25b6 Start using bot",
         "BUT_RESTART_CONTINUE": "\ud83d\uddd1 Continue",

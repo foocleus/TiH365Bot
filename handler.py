@@ -181,12 +181,14 @@ async def sendScheduledMessages(userIds):
 
 async def sendLargeText(text, messagesClass, userId=0):
     if len(text) < MESSAGE_LENGTH_LIMIT:
-        if userId != 0:
-            await messagesClass.send_message(chat_id=userId, text=text)
-        else:
-            await messagesClass.answer(text)
-        
-        return
+        try:
+            if type(messagesClass) == Message:
+                await messagesClass.answer(text)
+            else:
+                await messagesClass.send_message(chat_id=userId, text=text)
+        except:
+            await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
+            return
 
     lastMessageStartIndex = len(text)
     messages = []
@@ -199,10 +201,14 @@ async def sendLargeText(text, messagesClass, userId=0):
             lastMessageStartIndex = lastMessageStartIndex - fragmentSize + charIndex
         else: break
     for message in reversed(messages):
-        if userId != 0:
-            await messagesClass.send_message(chat_id=userId, text=message)
-        else:
-            await messagesClass.answer(message)
+        try:
+            if type(messagesClass) == Message:
+                await messagesClass.answer(message)
+            else:
+                await messagesClass.send_message(chat_id=userId, text=message)
+        except:
+            await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
+            return
         
 
 def assembleMenuText(menuName, userId) -> str:
