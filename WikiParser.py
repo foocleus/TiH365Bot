@@ -47,6 +47,7 @@ def getTodayPage():
 def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
     message = ""
     def splitContent(content : str):
+        content = content.replace('"', '&quot;')
         sectionsRaw = content.split(SECTION_SPLITTER)
         sectionsRaw = sectionsRaw[CONTENT_START_INDEX : CONTENT_END_INDEX]
         sectionsFinal = []
