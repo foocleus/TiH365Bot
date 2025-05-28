@@ -1,11 +1,12 @@
 #from random import randint
 #import asyncio
-from aiogram import Dispatcher
 #from aiogram.filters import CommandStart, Command
+from aiogram import Dispatcher
 from aiogram.types import Message, ContentType
 from aiogram.types.callback_query import CallbackQuery
 
 from stores import CommandStore, KeyboardStore, CallbackStore
+from translator import translator
 import stores.StringStore as Strs
 import WikiParser
 import DataManager
@@ -180,16 +181,8 @@ async def sendScheduledMessages(userIds):
 
 
 async def sendLargeText(text, messagesClass, userId=0):
-    if len(text) < MESSAGE_LENGTH_LIMIT:
-        try:
-            if type(messagesClass) == Message:
-                await messagesClass.answer(text)
-            else:
-                await messagesClass.send_message(chat_id=userId, text=text)
-        except:
-            await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
-            return
-
+    if userId == 0: userId = messagesClass.from_user.id
+    language = DataManager.get("lang", userId).lower()
     lastMessageStartIndex = len(text)
     messages = []
     while True:
@@ -200,17 +193,20 @@ async def sendLargeText(text, messagesClass, userId=0):
             messages.append(text[lastMessageStartIndex - fragmentSize + charIndex : lastMessageStartIndex])
             lastMessageStartIndex = lastMessageStartIndex - fragmentSize + charIndex
         else: break
-    for message in reversed(messages):
+
+    if language != "EN":
+        responses = await translator.translate(messages, dest=language, src="en")
+    for response in reversed(responses):
         try:
             if type(messagesClass) == Message:
-                await messagesClass.answer(message)
+                await messagesClass.answer(response.text)
             else:
-                await messagesClass.send_message(chat_id=userId, text=message)
+                await messagesClass.send_message(chat_id=userId, text=response.text)
         except:
             await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
             return
         
-
+    
 def assembleMenuText(menuName, userId) -> str:
     formattedSelectedSections = str(DataManager.get("selectedSections", userId))[2:-5].split(" ==', '")
     formattedEntriesPerRange = [str(i) for i in DataManager.get("entriesPerRange", userId)]
@@ -227,10 +223,10 @@ def assembleMenuText(menuName, userId) -> str:
         case "PREF_SECTIONS":
             return f'''
 {Strs.get(Strs.INF_SECTIONS)}
-{"✔" if formattedSelectedSections.count(Strs.get(Strs.PRF_SECTION_EVENTS)) > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_EVENTS)}
-{"✔" if formattedSelectedSections.count(Strs.get(Strs.PRF_SECTION_BIRTHS)) > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_BIRTHS)}
-{"✔" if formattedSelectedSections.count(Strs.get(Strs.PRF_SECTION_DEATHS)) > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_DEATHS)}
-{"✔" if formattedSelectedSections.count(Strs.get(Strs.PRF_SECTION_HOLIDAYS)) > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_HOLIDAYS)}
+{"✔" if formattedSelectedSections.count("Events") > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_EVENTS)}
+{"✔" if formattedSelectedSections.count("Births") > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_BIRTHS)}
+{"✔" if formattedSelectedSections.count("Deaths") > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_DEATHS)}
+{"✔" if formattedSelectedSections.count("Holidays and observances") > 0 else "❌"} {Strs.get(Strs.PRF_SECTION_HOLIDAYS)}
                     ''' 
         case "PREF_ENTRIES":
             return f'''
