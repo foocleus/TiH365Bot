@@ -57,7 +57,7 @@ PRF_ENTRIES_MODERN = "PRF_ENTRIES_MODERN"
 
 selectedLocale = "EN"
 locales = {}
-with open("./locales.json") as localeFile:
+with open("./locales.json", encoding="UTF-8") as localeFile:
     locales = json.load(localeFile)
 
 
