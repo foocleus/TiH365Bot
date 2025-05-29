@@ -7,7 +7,7 @@ from logger import Logger
 from WikiParser import EVENTS, BIRTHS, DEATHS, HOLIDAYS
 
 defaultValues = {
-    "lang": "EN",
+    "lang": "en",
     "isActivated": False,
     "scheduledHour" : 9,
     "selectedSections": [EVENTS, BIRTHS, DEATHS, HOLIDAYS],

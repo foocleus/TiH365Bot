@@ -1,6 +1,9 @@
 import wikipedia
 from random import sample
+from copy import deepcopy
 
+import cacher
+from translator import translator
 from month_full_names import *
 from logger import Logger
 
@@ -33,18 +36,24 @@ RANGES = ["=== Pre-1600 ===", "=== 1601-1900 ===", "=== 1901_Present ==="]
 def setLanguage(lang):
     pass
 
+def convertToPageName(date):
+    day, month = date.split(".")
+    day, month = int(day), int(month)
+    return f"{months_full_names[month]} {day}"
+
 def getPage(date : str): 
     try: 
-        day, month = date.split(".")
-        day, month = int(day), int(month)
-        return wikipedia.page(f"{months_full_names[month]} {day}", auto_suggest=False)
+        return wikipedia.page(convertToPageName(date), auto_suggest=False)
     except:
         return False
 
-def getTodayPage():
-    return getPage(wikipedia.datetime.now().strftime("%d.%m"))
+def getTodayDate():
+    return wikipedia.datetime.now().strftime("%d.%m")
 
-def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
+def getTodayPage():
+    return getPage(getTodayDate())
+
+async def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries, language):
     message = ""
     def splitContent(content : str):
         content = content.replace('"', '&quot;')
@@ -84,7 +93,7 @@ def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
     def sortEntries(entries):
         def safeIntSort(iterable):
             filtered = [value for value in iterable if value.isdecimal()]
-            return sorted(filtered, key=int)
+            return sorted(filtered, sectionName=int)
          
         years = []
         sortedEntries = []
@@ -122,12 +131,41 @@ def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
         else:
             return sample(values, number)
 
-    for section in splitContent(page.content):
-        headerEndIndex = section.find("/b>")+3
-        message += section[:headerEndIndex]
-        section = section[headerEndIndex:]
+    
+    selectedHeaders = []
+    cachedDict = cacher.loadCachedText(page.original_title, language)
+    if not cachedDict:
+        untranslatedList = []
+        for section in splitContent(page.content):
+            headerEndIndex = section.find("/b>")+3
+            message += section[:headerEndIndex]
+            section = section[headerEndIndex:]
+            selectedHeaders.append(headerEndIndex)
+            cachedDict[str(headerEndIndex)] = list()
+            for range in splitSection(section):
+                #cachedDict[headerEndIndex].append(range)
+                untranslatedList.append(range)
+        if language != "en":
+            responses = await translator.translate(untranslatedList, language, "en")
+        else:
+            responses = deepcopy(untranslatedList)
+
+        ri = 0
+        for response in responses:
+            if type(response) != str:
+                cachedDict[selectedHeaders[ri % 3]].append(response.text)
+            else:
+                cachedDict[selectedHeaders[ri % 3]].append(response)
+            ri += 1
+        cacher.writeTextToCache(cachedDict, page.original_title, language)
+
+
+    for headerEndIndex, section in cachedDict.items():
+        # headerEndIndex = section.find("/b>")+3
+        # message += section[:headerEndIndex]
+        # section = section[headerEndIndex:]
         ri = 0 # range index
-        for range in splitSection(section):
+        for range in section:
             entries = filterEntries(splitRanges(range))
             if headerEndIndex == len(headers["Events =="]):
                 message += "\n" + "\n".join(sortEntries(safeSample(entries, entriesPerRange[ri])))
@@ -141,10 +179,10 @@ def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
     message += f"\n🔗 Source: <a href=\"{page.url}\">Wikipedia</a>"
     return message
 
-def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
-    return getPageEvents(getPage(date), selectedSections, entriesPerRange, holidaysEntries)
+async def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries, language):
+    return await getPageEvents(getPage(date), selectedSections, entriesPerRange, holidaysEntries, language)
 
-def getTodayEvents(selectedSections, entriesPerRange, holidaysEntries):
-    return getDayEvents(wikipedia.datetime.now().strftime("%d.%m"), selectedSections, entriesPerRange, holidaysEntries)
+async def getTodayEvents(selectedSections, entriesPerRange, holidaysEntries, language):
+    return await getDayEvents(wikipedia.datetime.now().strftime("%d.%m"), selectedSections, entriesPerRange, holidaysEntries, language)
 
 #getTodayEvents([EVENTS, BIRTHS, DEATHS, HOLIDAYS], [2, 8, 2], 5)
