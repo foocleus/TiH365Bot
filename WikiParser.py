@@ -44,7 +44,7 @@ def getPage(date : str):
 def getTodayPage():
     return getPage(wikipedia.datetime.now().strftime("%d.%m"))
 
-def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
+def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries, language):
     message = ""
     def splitContent(content : str):
         content = content.replace('"', '&quot;')
@@ -134,17 +134,21 @@ def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries):
             elif headerEndIndex == len(headers["Holidays and observances =="]):
                 message += "\n" + "\n".join(safeSample(entries, holidaysEntries))
             else:
-                message += "\n" + "\n".join(addLinksToEntries(sortEntries(safeSample(entries, entriesPerRange[ri]))))
+                if language == "EN":
+                    message += "\n" + "\n".join(addLinksToEntries(sortEntries(safeSample(entries, entriesPerRange[ri]))))
+                else:
+                    message += "\n" + "\n".join(sortEntries(safeSample(entries, entriesPerRange[ri])))
+                
             message += "\n"
             ri += 1
 
     message += f"\n🔗 Source: <a href=\"{page.url}\">Wikipedia</a>"
     return message
 
-def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries):
-    return getPageEvents(getPage(date), selectedSections, entriesPerRange, holidaysEntries)
+def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries, language):
+    return getPageEvents(getPage(date), selectedSections, entriesPerRange, holidaysEntries, language)
 
-def getTodayEvents(selectedSections, entriesPerRange, holidaysEntries):
-    return getDayEvents(wikipedia.datetime.now().strftime("%d.%m"), selectedSections, entriesPerRange, holidaysEntries)
+def getTodayEvents(selectedSections, entriesPerRange, holidaysEntries, language):
+    return getDayEvents(wikipedia.datetime.now().strftime("%d.%m"), selectedSections, entriesPerRange, holidaysEntries, language)
 
 #getTodayEvents([EVENTS, BIRTHS, DEATHS, HOLIDAYS], [2, 8, 2], 5)

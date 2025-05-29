@@ -65,7 +65,7 @@ async def handleCallback(callbackQuery: CallbackQuery):
                     DataManager.set("isActivated", True, userId)
                     await sendLargeText(WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
                                                                 DataManager.get("entriesPerRange", userId),
-                                                                DataManager.get("holidaysEntries", userId)), callbackQuery.message)
+                                                                DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), callbackQuery.message)
                     
                 case CallbackStore.RESTART_CONTINUE:
                     DataManager.set("isActivated", False, userId)
@@ -112,7 +112,7 @@ async def handleCommand(message: Message):
             case CommandStore.EVENTSTODAY.command:
                 await sendLargeText(WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
                                                             DataManager.get("entriesPerRange", userId),
-                                                            DataManager.get("holidaysEntries", userId)), message)
+                                                            DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), message)
             case CommandStore.EVENTSTHATDAY.command:
                 await message.answer(Strs.get(Strs.INF_SELECT_DATE))
             case CommandStore.EVENTSTHATDAY.command:
@@ -162,7 +162,7 @@ async def handleText(message: Message):
         await sendLargeText(WikiParser.getPageEvents(page,
                                                     DataManager.get("selectedSections", userId),
                                                     DataManager.get("entriesPerRange", userId),
-                                                    DataManager.get("holidaysEntries", userId)), message)
+                                                    DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), message)
     else:
         await message.answer(Strs.get(Strs.ERR_NOT_TEXT_INPUT))
 
@@ -177,7 +177,7 @@ async def sendScheduledMessages(userIds):
         await sendLargeText(WikiParser.getPageEvents(page,
                                                      DataManager.get("selectedSections", id),
                                                      DataManager.get("entriesPerRange", id),
-                                                     DataManager.get("holidaysEntries", id)), bot, id)
+                                                     DataManager.get("holidaysEntries", id), DataManager.get("lang", id)), bot, id)
 
 
 async def sendLargeText(text, messagesClass, userId=0):
