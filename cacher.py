@@ -21,6 +21,6 @@ def writeTextToCache(textDict, date, language):
         os.makedirs(path, exist_ok=True)
         i = 0
         for text in rangeList:
-            with open(f"{path}/{i}", "w") as cacheFile:
+            with open(f"{path}/{i}", "w", encoding='utf-8') as cacheFile:
                 cacheFile.write(text)
             i += 1

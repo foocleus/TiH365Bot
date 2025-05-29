@@ -153,9 +153,9 @@ async def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries
         ri = 0
         for response in responses:
             if type(response) != str:
-                cachedDict[selectedHeaders[ri % 3]].append(response.text)
+                cachedDict[str(selectedHeaders[ri % 3])].append(response.text)
             else:
-                cachedDict[selectedHeaders[ri % 3]].append(response)
+                cachedDict[str(selectedHeaders[ri % 3])].append(response)
             ri += 1
         cacher.writeTextToCache(cachedDict, page.original_title, language)
 
