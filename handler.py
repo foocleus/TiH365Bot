@@ -63,9 +63,9 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 case CallbackStore.TUTORIAL_FINISH:
                     await callbackQuery.message.edit_reply_markup(None)
                     DataManager.set("isActivated", True, userId)
-                    await sendLargeText(WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
+                    await sendLargeText(await WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
                                                                 DataManager.get("entriesPerRange", userId),
-                                                                DataManager.get("holidaysEntries", userId)), callbackQuery.message)
+                                                                DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), callbackQuery.message)
                     
                 case CallbackStore.RESTART_CONTINUE:
                     DataManager.set("isActivated", False, userId)
@@ -110,9 +110,9 @@ async def handleCommand(message: Message):
             case CommandStore.HELP.command:
                 await message.answer(Strs.get(Strs.INF_HELP_HEADER) + CommandStore.listCommandInfo())
             case CommandStore.EVENTSTODAY.command:
-                await sendLargeText(WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
+                await sendLargeText(await WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
                                                             DataManager.get("entriesPerRange", userId),
-                                                            DataManager.get("holidaysEntries", userId)), message)
+                                                            DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), message)
             case CommandStore.EVENTSTHATDAY.command:
                 await message.answer(Strs.get(Strs.INF_SELECT_DATE))
             case CommandStore.EVENTSTHATDAY.command:
@@ -159,10 +159,10 @@ async def handleText(message: Message):
         if not page: 
             await message.answer(Strs.get(Strs.ERR_INVALID_DATE)) 
             return
-        await sendLargeText(WikiParser.getPageEvents(page,
+        await sendLargeText(await WikiParser.getPageEvents(page,
                                                     DataManager.get("selectedSections", userId),
                                                     DataManager.get("entriesPerRange", userId),
-                                                    DataManager.get("holidaysEntries", userId)), message)
+                                                    DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), message)
     else:
         await message.answer(Strs.get(Strs.ERR_NOT_TEXT_INPUT))
 
@@ -174,10 +174,10 @@ def setBotClass(botClass):
 async def sendScheduledMessages(userIds):
     page = WikiParser.getTodayPage()
     for id in userIds:
-        await sendLargeText(WikiParser.getPageEvents(page,
+        await sendLargeText(await WikiParser.getPageEvents(page,
                                                      DataManager.get("selectedSections", id),
                                                      DataManager.get("entriesPerRange", id),
-                                                     DataManager.get("holidaysEntries", id)), bot, id)
+                                                     DataManager.get("holidaysEntries", id), DataManager.get("lang", id)), bot, id)
 
 
 async def sendLargeText(text, messagesClass, userId=0):
@@ -194,15 +194,14 @@ async def sendLargeText(text, messagesClass, userId=0):
             lastMessageStartIndex = lastMessageStartIndex - fragmentSize + charIndex
         else: break
 
-    if language != "EN":
-        responses = await translator.translate(messages, dest=language, src="en")
-    for response in reversed(responses):
+    for message in reversed(messages):
         try:
             if type(messagesClass) == Message:
-                await messagesClass.answer(response.text)
+                await messagesClass.answer(message)
             else:
-                await messagesClass.send_message(chat_id=userId, text=response.text)
-        except:
+                await messagesClass.send_message(chat_id=userId, text=message)
+        except Exception as e:
+            print(e)
             await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
             return
         
