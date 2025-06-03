@@ -7,7 +7,7 @@ from logger import Logger
 from WikiParser import EVENTS, BIRTHS, DEATHS, HOLIDAYS
 
 defaultValues = {
-    "lang": "EN",
+    "lang": "en",
     "isActivated": False,
     "scheduledHour" : 9,
     "selectedSections": [EVENTS, BIRTHS, DEATHS, HOLIDAYS],
@@ -59,5 +59,5 @@ async def autoSaveTask():
     while True:
         await asyncio.sleep(60) # 60 by default
         with open("./user-data.json", "w") as dataFile:
-            json.dump(userData, dataFile)
+            json.dump(userData, dataFile, indent=4)
         Logger.info("User data auto saved")
