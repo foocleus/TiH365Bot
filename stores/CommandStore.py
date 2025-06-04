@@ -8,6 +8,10 @@ EVENTSTODAY = BotCommand(command="eventstoday", description=Strs.COM_EVENTSTODAY
 EVENTSTHATDAY = BotCommand(command="eventsthatday", description=Strs.COM_EVENTSTHATDAY)
 PREFERENCES = BotCommand(command="preferences", description=Strs.COM_PREFERENCES)
 PREF = BotCommand(command="pref", description=Strs.COM_PREFERENCES)
+LANGUAGE = BotCommand(command="language", description=Strs.COM_PREFERENCES)
+SECTIONS = BotCommand(command="sections", description=Strs.COM_PREFERENCES)
+ENTRIES = BotCommand(command="entries", description=Strs.COM_PREFERENCES)
+SCHEDULE = BotCommand(command="schedule", description=Strs.COM_PREFERENCES)
 
 __copy = locals().copy()
 

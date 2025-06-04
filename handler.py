@@ -112,6 +112,15 @@ async def handleCommand(message: Message):
                 pass
             case CommandStore.PREFERENCES.command | CommandStore.PREF.command:
                 await message.answer(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
+            case CommandStore.LANGUAGE.command:
+                await message.answer("Select your language:", reply_markup=KeyboardStore.inline.language)
+            case CommandStore.SECTIONS.command:
+                await message.answer(assembleMenuText(PREF_SECTIONS, userId), reply_markup=KeyboardStore.inline.preferencesSections)
+            case CommandStore.ENTRIES.command:
+                await message.answer(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
+            case CommandStore.SCHEDULE.command:
+                DataManager.set("currentInput", 4, userId)
+                await message.answer(assembleMenuText(PREF_TIME_INPUT, userId))
             case _:
                 await message.answer(Strs.get(Strs.ERR_COMMAND_NOT_EXIST))
 

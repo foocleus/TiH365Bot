@@ -26,7 +26,11 @@
         "COM_EVENTSTODAY": "Lists random events that happened today",
         "COM_EVENTSTHATDAY": "Lists random events that happened on the selected day",
         "COM_EVENTSTHATDAYALL": "Lists all events that happened on the selected day",
-        "COM_PREFERENCES": "Opens menu of preferences",
+        "COM_PREFERENCES": "Opens the preferences menu.",
+        "COM_LANGUAGE": "Opens the language selection menu directly, bypassing the preferences menu.",
+        "COM_SECTIONS": "Opens the sections selection menu directly, bypassing the preferences menu.",
+        "COM_ENTRIES": "Opens the entries per period menu directly, bypassing the preferences menu.",
+        "COM_SCHEDULE": "Opens the schedule menu directly, bypassing the preferences menu.",
 
         "INF_HELP_HEADER": "\ud83d\udcc3 Here is the list of all available commands:\n\n",
         "INF_TUTOR_NOTICE": "\n\u2139 <b>You can open this list any time by typing</b> /help",
@@ -84,6 +88,10 @@
         "COM_EVENTSTODAY": "Надсилає список випадкових подій, що відбулися сьогодні",
         "COM_EVENTSTHATDAY": "Надсилає список випадкових подій, що відбулися у вибраний день",
         "COM_PREFERENCES": "Відкриває меню налаштувань",
+        "COM_LANGUAGE": "Відкриває меню вибору мови, оминаючи меню налаштувань.",
+        "COM_SECTIONS": "Відкриває меню вибору розділів, оминаючи меню налаштувань.",
+        "COM_ENTRIES": "Відкриває меню вибору кількості записів за період, оминаючи меню налаштувань.",
+        "COM_SCHEDULE": "Відкриває меню розкладу, оминаючи меню налаштувань.",
     
         "INF_HELP_HEADER": "\ud83d\udcc3 Ось список усіх доступних команд:\n\n",
         "INF_TUTOR_NOTICE": "\n\u2139 <b>Ви можете відкрити цей список будь-коли, набравши</b> /help",
