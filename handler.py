@@ -110,6 +110,7 @@ async def handleCommand(message: Message):
             case CommandStore.HELP.command:
                 await message.answer(Strs.get(Strs.INF_HELP_HEADER) + CommandStore.listCommandInfo())
             case CommandStore.EVENTSTODAY.command:
+                await message.bot.send_chat_action(message.chat.id, "typing")
                 await sendLargeText(await WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
                                                             DataManager.get("entriesPerRange", userId),
                                                             DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), message)
@@ -159,6 +160,7 @@ async def handleText(message: Message):
         if not page: 
             await message.answer(Strs.get(Strs.ERR_INVALID_DATE)) 
             return
+        await message.bot.send_chat_action(message.chat.id, "typing")
         await sendLargeText(await WikiParser.getPageEvents(page,
                                                     DataManager.get("selectedSections", userId),
                                                     DataManager.get("entriesPerRange", userId),
@@ -180,7 +182,7 @@ async def sendScheduledMessages(userIds):
                                                      DataManager.get("holidaysEntries", id), DataManager.get("lang", id)), bot, id)
 
 
-async def sendLargeText(text, messagesClass, userId=0):
+async def sendLargeText(text, messagesClass:Message, userId=0):
     if userId == 0: userId = messagesClass.from_user.id
     language = DataManager.get("lang", userId).lower()
     lastMessageStartIndex = len(text)
