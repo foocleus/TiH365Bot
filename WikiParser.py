@@ -167,7 +167,10 @@ async def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries
             elif name == HOLIDAYS:
                 message += "\n" + "\n".join(safeSample(entries, holidaysEntries))
             else:
-                message += "\n" + "\n".join(addLinksToEntries(sortEntries(safeSample(entries, entriesPerRange[i]))))
+                if language == "en":
+                    message += "\n" + "\n".join(addLinksToEntries(sortEntries(safeSample(entries, entriesPerRange[i]))))
+                else:
+                    message += "\n" + "\n".join(sortEntries(safeSample(entries, entriesPerRange[i])))
             message += "\n"
 
     message += f"\n🔗 {Strs.get(Strs.INF_SOURCE)}: <a href=\"{page.url}\">Wikipedia</a>"
