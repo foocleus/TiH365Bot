@@ -6,6 +6,7 @@ import cacher
 from translator import translator
 from month_full_names import *
 from logger import Logger
+import stores.StringStore as Strs
 
 
 CONTENT_START_INDEX = 1
@@ -23,14 +24,9 @@ WIKIPEDIA_HYPERLINK = "https://en.wikipedia.org/wiki/"
 
 sectionTypes = [EVENTS, BIRTHS, DEATHS, HOLIDAYS]
 
-headers = {
-    EVENTS : "\n<b>Historical events that happened today:</b>",
-    BIRTHS : "\n<b>Famous people born today:</b>",
-    DEATHS : "\n<b>Famous people who passed away today:</b>",
-    HOLIDAYS : "\n<b>Holidays around the globe today:</b>",
-}
 filters = [
-    "Christian feast day:"
+    "Christian feast day:",
+    "День християнського свята:",
 ]
 
 #RANGES = ["=== Pre-1600 ===", "=== 1601-1900 ===", "=== 1901_Present ==="]
@@ -57,6 +53,13 @@ def getTodayPage():
     return getPage(getTodayDate())
 
 async def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries, language):
+    Strs.setLocale(language)
+    headers = {
+        EVENTS : Strs.get(Strs.INF_EVENTS),
+        BIRTHS : Strs.get(Strs.INF_BIRTHS),
+        DEATHS : Strs.get(Strs.INF_DEATHS),
+        HOLIDAYS : Strs.get(Strs.INF_HOLIDAYS),
+    }
     message = ""
     def splitPageContent(content):
         content = content.replace('"', '&quot;')
@@ -167,7 +170,7 @@ async def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries
                 message += "\n" + "\n".join(addLinksToEntries(sortEntries(safeSample(entries, entriesPerRange[i]))))
             message += "\n"
 
-    message += f"\n🔗 Source: <a href=\"{page.url}\">Wikipedia</a>"
+    message += f"\n🔗 {Strs.get(Strs.INF_SOURCE)}: <a href=\"{page.url}\">Wikipedia</a>"
     return message
 
 async def getDayEvents(date, selectedSections, entriesPerRange, holidaysEntries, language):

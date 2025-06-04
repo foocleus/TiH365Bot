@@ -41,6 +41,12 @@ INF_ENTRIES = "INF_ENTRIES"
 INF_ENTRIES_INPUT = "INF_ENTRIES_INPUT"
 INF_TIME_INPUT = "INF_TIME_INPUT"
 
+INF_SOURCE = "INF_SOURCE"
+INF_EVENTS = "INF_EVENTS"
+INF_BIRTHS = "INF_BIRTHS"
+INF_DEATHS = "INF_DEATHS"
+INF_HOLIDAYS = "INF_HOLIDAYS"
+
 PRO_RESTART = "PRO_RESTART"
 
 PRF_LANGUAGE = "PRF_LANGUAGE" 
@@ -55,6 +61,7 @@ PRF_ENTRIES_PRE1600 = "PRF_ENTRIES_PRE1600"
 PRF_ENTRIES_1601_1900 = "PRF_ENTRIES_1601_1900" 
 PRF_ENTRIES_MODERN = "PRF_ENTRIES_MODERN"
 
+
 selectedLocale = "EN"
 locales = {}
 with open("./locales.json", encoding="UTF-8") as localeFile:
@@ -65,9 +72,12 @@ def getStringDirectly(stringName, userId:int):
     language = DataManager.get("lang", str(userId))
     return locales[language].get(stringName, "?")
 
-def setLocaleById(userId:int):
+def setLocale(lang):
     global selectedLocale
-    selectedLocale = DataManager.get("lang", str(userId))
+    selectedLocale = lang
+
+def setLocaleById(userId:int):
+    setLocale(DataManager.get("lang", str(userId)))
 
 def get(stringName):
     return locales[selectedLocale].get(stringName, "?")

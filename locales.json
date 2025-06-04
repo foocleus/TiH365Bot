@@ -34,9 +34,14 @@
         "INF_SELECT_DATE": "Enter the date for events in <code>day.month</code> format, e.g., <code>03.01</code>, which stands for January 3rd:",
         "INF_ENTRIES_INPUT": "Enter the number of entries for this period: ",
         "INF_TIME_INPUT": "Enter the hour to send the scheduled message (0-23): ",
-        "INF_SECTIONS" : "\ud83d\udccd <b>Sections</b>",
-        "INF_ENTRIES" : "\u2712 <b>Entries per period</b>",
-
+        "INF_SECTIONS": "\ud83d\udccd <b>Sections</b>",
+        "INF_ENTRIES": "\u2712 <b>Entries per period</b>",
+        "INF_SOURCE": "Source",
+        "INF_EVENTS": "\n<b>Historical events that happened today:</b>",
+        "INF_BIRTHS": "\n<b>Famous people born today:</b>",
+        "INF_DEATHS": "\n<b>Famous people who passed away today:</b>",
+        "INF_HOLIDAYS": "\n<b>Holidays around the globe today:</b>",
+        
         "PRO_RESTART": "<b>\u26a0 Are you sure you want to continue? Continuation of this action will result in DELETION OF ALL OF YOUR PREFERENCE</b>",
 
         "PRF_LANGUAGE": "\n\ud83c\uddfa\ud83c\uddf3 Language",
@@ -88,6 +93,11 @@
         "INF_TIME_INPUT": "Введіть годину для надсилання запланованого повідомлення (0-23): ",
         "INF_SECTIONS": "\ud83d\udccd <b>Розділи</b>",
         "INF_ENTRIES": "\u2712 <b>Записи за період</b>",
+        "INF_SOURCE": "Джерело",
+        "INF_EVENTS": "\n<b>Історичні події, що відбулися сьогодні:</b>",
+        "INF_BIRTHS": "\n<b>Відомі люди, які народилися сьогодні:</b>",
+        "INF_DEATHS": "\n<b>Відомі люди, які померли сьогодні:</b>",
+        "INF_HOLIDAYS": "\n<b>Свята у світі сьогодні:</b>",
     
         "PRO_RESTART": "<b>\u26a0 Ви впевнені, що хочете продовжити? Продовження цієї дії призведе до ВИДАЛЕННЯ ВСІХ ВАШИХ НАЛАШТУВАНЬ</b>",
     
