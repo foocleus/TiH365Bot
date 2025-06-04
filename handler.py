@@ -39,8 +39,7 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 KeyboardStore.refreshLocale()
                 await callbackQuery.message.edit_text(Strs.get(Strs.INF_HELP_HEADER)
                                                        + CommandStore.listCommandInfo()
-                                                       + Strs.get(Strs.INF_TUTOR_NOTICE), 
-                                                      reply_markup=KeyboardStore.inline.tutorial)
+                                                       + Strs.get(Strs.INF_TUTOR_NOTICE))
             else:                                           # User sets language using preferences menu
                 DataManager.set("lang", language, userId)
                 Strs.setLocaleById(userId)
@@ -59,14 +58,7 @@ async def handleCallback(callbackQuery: CallbackQuery):
             DataManager.set("currentInput", int(callbackQuery.data[5:]), userId)
             await callbackQuery.message.edit_text(assembleMenuText(PREF_ENTRIES_INPUT, userId))
         else:
-            match callbackQuery.data:
-                case CallbackStore.TUTORIAL_FINISH:
-                    await callbackQuery.message.edit_reply_markup(None)
-                    DataManager.set("isActivated", True, userId)
-                    await sendLargeText(await WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
-                                                                DataManager.get("entriesPerRange", userId),
-                                                                DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), callbackQuery.message)
-                    
+            match callbackQuery.data:                    
                 case CallbackStore.RESTART_CONTINUE:
                     DataManager.set("isActivated", False, userId)
                     await callbackQuery.message.edit_text("Select your language:", reply_markup=KeyboardStore.inline.language)
@@ -96,7 +88,7 @@ async def handleCommand(message: Message):
     KeyboardStore.refreshLocale()
     if message.content_type == ContentType.TEXT:
         if not isActivated and message.text[1:] != CommandStore.START.command:
-            await message.answer("Finish setup before using the bot functionality") 
+            await message.answer("\u274cFinish setup before using the bot functionality") 
             return 
         if DataManager.get("currentInput", userId) is not None:
             await message.answer(Strs.get(Strs.ERR_UNFINISHED_INPUT)) 
@@ -132,7 +124,7 @@ async def handleText(message: Message):
     KeyboardStore.refreshLocale()
     if message.content_type == ContentType.TEXT:
         if not DataManager.get("isActivated", userId):
-            message.answer("Finish setup before using the bot functionality") 
+            message.answer("\u274cFinish setup before using the bot functionality") 
             return
         currentInput = DataManager.get("currentInput", userId)
         if currentInput != None:
@@ -184,7 +176,7 @@ async def sendScheduledMessages(userIds):
 
 async def sendLargeText(text, messagesClass:Message, userId=0):
     if userId == 0: userId = messagesClass.from_user.id
-    language = DataManager.get("lang", userId).lower()
+    #language = DataManager.get("lang", userId).lower()
     lastMessageStartIndex = len(text)
     messages = []
     while True:
