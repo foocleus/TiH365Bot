@@ -9,7 +9,7 @@ from WikiParser import EVENTS, BIRTHS, DEATHS, HOLIDAYS
 defaultValues = {
     "lang": "en",
     "isActivated": False,
-    "scheduledHour" : 9,
+    "scheduledHour" : 12,
     "selectedSections": [EVENTS, BIRTHS, DEATHS, HOLIDAYS],
     "entriesPerRange": [3, 3, 3],
     "holidaysEntries": 5,
