@@ -102,7 +102,9 @@ async def getPageEvents(page, selectedSections, entriesPerRange, holidaysEntries
         years = []
         sortedEntries = []
         for entry in entries:
-            years.append(entry[:entry.find(" ")])
+            spaceIndex = entry.find(" ")
+            year = entry[:spaceIndex] if spaceIndex < 5 else entry[:entry.find("-")]
+            years.append(year)
         years = safeIntSort(years)
         for year in years:
             for entry in entries:
