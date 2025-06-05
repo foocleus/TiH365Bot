@@ -26,6 +26,7 @@ def refreshLocale():
             [InlineKeyboardButton(text="🇺🇦 Українська", callback_data=CallbackStore.LANGUAGE_UKRAINIAN)],
             [InlineKeyboardButton(text="🇪🇸 Español", callback_data=CallbackStore.LANGUAGE_SPANISH)],
             [InlineKeyboardButton(text="🇫🇷 Français", callback_data=CallbackStore.LANGUAGE_FRENCH)],
+            [InlineKeyboardButton(text="🇧🇬 Български", callback_data=CallbackStore.LANGUAGE_BULGARIAN)],
         ]),
         tutorial = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_TUTOR_FINISH), callback_data=CallbackStore.TUTORIAL_FINISH)],
