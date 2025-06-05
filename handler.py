@@ -230,7 +230,7 @@ def assembleMenuText(menuName, userId) -> str:
 {Strs.get(Strs.PRF_LANGUAGE)} - <code>{DataManager.get("lang", userId)}</code>
 {Strs.get(Strs.PRF_SECTIONS)} - <code>{", ".join(formattedSelectedSections)}</code>
 {Strs.get(Strs.PRF_ENTRIES)} - <code>{", ".join(formattedEntriesPerRange) + f", {holidaysEntries}"}</code>
-{Strs.get(Strs.PRF_TIME)} - <code>{DataManager.get("scheduledHour", userId)}:00</code>
+{Strs.get(Strs.PRF_TIME)} - <code>{DataManager.get("scheduledHour", userId)}:00</code> {Strs.get(Strs.INF_KYIV_TIME)}
                     '''
         case "PREF_SECTIONS":
             return f'''

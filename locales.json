@@ -1,6 +1,5 @@
 {
     "en": {
-
         "ERR_SOMETHING_WRONG": "\u274c Something went wrong.",
         "ERR_COMMAND_NOT_EXIST": "\u274c This command does not exist. Please open the menu to see the available commands.",
         "ERR_NOT_TEXT_INPUT": "\u274c The bot supports only text commands. Please open the menu to see the available text commands.",
@@ -47,6 +46,7 @@
         "INF_BIRTHS": "\n<b>Famous people born today:</b>",
         "INF_DEATHS": "\n<b>Famous people who passed away today:</b>",
         "INF_HOLIDAYS": "\n<b>Holidays around the globe today:</b>",
+        "INF_KYIV_TIME": "in Kyiv time",
         
         "PRO_RESTART": "<b>\u26a0 Are you sure you want to continue? Continuation of this action will result in DELETION OF ALL OF YOUR PREFERENCES!</b>",
 
@@ -109,6 +109,7 @@
         "INF_BIRTHS": "\n<b>Відомі люди, які народилися сьогодні:</b>",
         "INF_DEATHS": "\n<b>Відомі люди, які померли сьогодні:</b>",
         "INF_HOLIDAYS": "\n<b>Свята у світі сьогодні:</b>",
+        "INF_KYIV_TIME": "за київським часом",
     
         "PRO_RESTART": "<b>\u26a0 Ви впевнені, що хочете продовжити? Продовження цієї дії призведе до ВИДАЛЕННЯ ВСІХ ВАШИХ НАЛАШТУВАНЬ!</b>",
     
@@ -123,6 +124,69 @@
         "PRF_ENTRIES_PRE1600": "До 1600 року",
         "PRF_ENTRIES_1601_1900": "1601-1900",
         "PRF_ENTRIES_MODERN": "1901-сьогодення"
+    },
+    "es": {
+        "ERR_SOMETHING_WRONG": "\u274c Algo salió mal.",
+        "ERR_COMMAND_NOT_EXIST": "\u274c Este comando no existe. Por favor, abre el menú para ver los comandos disponibles.",
+        "ERR_NOT_TEXT_INPUT": "\u274c El bot solo admite comandos de texto. Por favor, abre el menú para ver los comandos de texto disponibles.",
+        "ERR_INVALID_DATE": "\u274c Formato de fecha inválido. Usa el formato <code>día.mes</code>.",
+        "ERR_INVALID_FORMAT": "\u274c Formato de entrada inválido. Por favor, ingresa solo números enteros positivos.",
+        "ERR_UNFINISHED_INPUT": "\u274c Por favor, completa la configuración de preferencias antes de usar los comandos.",
+        "ERR_WIKI_LIMIT": "\u274c Has alcanzado el límite de mensajes wiki permitidos por 5 minutos.",
+        "ERR_USER_PENDING": "\u274c Tu mensaje anterior aún está siendo procesado. Por favor, espera una respuesta antes de enviar otro mensaje.",
+
+        "BUT_TUTOR_FINISH": "\u25b6 Comenzar a usar el bot",
+        "BUT_RESTART_CONTINUE": "\ud83d\uddd1 Continuar",
+        "BUT_RESTART_CANCEL": "\u2b05 Cancelar y regresar",
+        "BUT_SECTION_EVENTS": "\ud83d\uddb2 Alternar sección de Eventos",
+        "BUT_SECTION_BIRTHS": "\ud83d\uddb2 Alternar sección de Nacimientos",
+        "BUT_SECTION_DEATHS": "\ud83d\uddb2 Alternar sección de Fallecimientos",
+        "BUT_SECTION_HOLIDAYS": "\ud83d\uddb2 Alternar sección de Feriados y conmemoraciones",
+        "BUT_ENTRIES_PRE1600": "\u270f Ajustar el número de entradas antes de 1600 por mensaje",
+        "BUT_ENTRIES_1601_1900": "\u270f Ajustar el número de entradas de 1601 a 1900 por mensaje",
+        "BUT_ENTRIES_MODERN": "\u270f Ajustar el número de entradas de 1901 hasta el presente por mensaje",
+        "BUT_ENTRIES_HOLIDAYS": "\u270f Ajustar el número de entradas de Feriados y conmemoraciones por mensaje",
+        "BUT_PREFERENCES_GO_BACK": "\u2b05 Regresar",
+
+        "COM_START": "Restablece todas las preferencias.",
+        "COM_HELP": "Envía la lista de todos los comandos disponibles.",
+        "COM_EVENTSTODAY": "Lista eventos aleatorios que ocurrieron hoy.",
+        "COM_EVENTSTHATDAY": "Lista eventos aleatorios que ocurrieron en el día seleccionado.",
+        "COM_EVENTSTHATDAYALL": "Lista todos los eventos que ocurrieron en el día seleccionado.",
+        "COM_PREFERENCES": "Abre el menú de preferencias.",
+        "COM_LANGUAGE": "Abre directamente el menú de selección de idioma, omitiendo el menú de preferencias.",
+        "COM_SECTIONS": "Abre directamente el menú de selección de secciones, omitiendo el menú de preferencias.",
+        "COM_ENTRIES": "Abre directamente el menú de entradas por período, omitiendo el menú de preferencias.",
+        "COM_SCHEDULE": "Abre directamente el menú de programación, omitiendo el menú de preferencias.",
+
+        "INF_HELP_HEADER": "\ud83d\udcc3 Aquí está la lista de todos los comandos disponibles:\n\n",
+        "INF_TUTOR_NOTICE": "\n\u2139 <b>Puedes abrir esta lista en cualquier momento escribiendo</b> /help",
+        "INF_PREFERENCES": "\u2699 <b>Preferencias</b>",
+        "INF_SELECT_DATE": "Ingresa la fecha para los eventos en formato <code>día.mes</code>, por ejemplo, <code>03.01</code>, que significa 3 de enero:",
+        "INF_ENTRIES_INPUT": "Ingresa el número de entradas para este período: ",
+        "INF_TIME_INPUT": "Ingresa la hora para enviar el mensaje programado (0-23): ",
+        "INF_SECTIONS": "\ud83d\udccd <b>Secciones</b>",
+        "INF_ENTRIES": "\u2712 <b>Entradas por período</b>",
+        "INF_SOURCE": "Fuente",
+        "INF_EVENTS": "\n<b>Eventos históricos que ocurrieron hoy:</b>",
+        "INF_BIRTHS": "\n<b>Personas famosas nacidas hoy:</b>",
+        "INF_DEATHS": "\n<b>Personas famosas que fallecieron hoy:</b>",
+        "INF_HOLIDAYS": "\n<b>Feriados en el mundo hoy:</b>",
+        "INF_KYIV_TIME": "hora de Kyiv",
+
+        "PRO_RESTART": "<b>\u26a0 ¿Estás seguro de que quieres continuar? ¡Continuar esta acción resultará en la ELIMINACIÓN DE TODAS TUS PREFERENCIAS!</b>",
+
+        "PRF_LANGUAGE": "\n\ud83c\uddfa\ud83c\uddf3 Idioma",
+        "PRF_SECTIONS": "\ud83d\udccd Secciones",
+        "PRF_ENTRIES": "\u2712 Entradas por período",
+        "PRF_TIME": "\u23f0 Enviar mensaje programado a las",
+        "PRF_SECTION_EVENTS": "Eventos",
+        "PRF_SECTION_BIRTHS": "Nacimientos",
+        "PRF_SECTION_DEATHS": "Fallecimientos",
+        "PRF_SECTION_HOLIDAYS": "Feriados y conmemoraciones",
+        "PRF_ENTRIES_PRE1600": "Antes de 1600",
+        "PRF_ENTRIES_1601_1900": "1601-1900",
+        "PRF_ENTRIES_MODERN": "1901-Presente"
     },
     "RR": {
         "ERR_SOMETHING_WRONG": "\u274c router",
