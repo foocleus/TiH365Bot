@@ -8,6 +8,7 @@
         "ERR_INVALID_FORMAT": "\u274c Invalid input format. Please enter only positive integers.",
         "ERR_UNFINISHED_INPUT": "\u274c Please complete the preference settings before using the commands.",
         "ERR_WIKI_LIMIT": "\u274c You have reached the limit of wiki messages allowed per 5 minutes.",
+        "ERR_USER_PENDING": "\u274c Your previous message is still being processed. Please wait for a response before sending another message.",
 
         "BUT_TUTOR_FINISH": "\u25b6 Start using the bot",
         "BUT_RESTART_CONTINUE": "\ud83d\uddd1 Continue",
@@ -70,6 +71,7 @@
         "ERR_INVALID_FORMAT": "\u274c Неправильний формат введення. Вводьте лише додатні цілі числа.",
         "ERR_UNFINISHED_INPUT": "\u274c Завершіть налаштування вподобань перед використанням команд.",
         "ERR_WIKI_LIMIT": "\u274c Ви досягли ліміту повідомлень з вікі за 5 хвилин.",
+        "ERR_USER_PENDING": "\u274c Ваше попереднє повідомлення ще обробляється. Будь ласка, зачекайте на відповідь, перш ніж надсилати наступне повідомлення.",
     
         "BUT_TUTOR_FINISH": "\u25b6 Почати користуватися ботом",
         "BUT_RESTART_CONTINUE": "\ud83d\uddd1 Продовжити",

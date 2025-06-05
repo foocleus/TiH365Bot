@@ -8,7 +8,7 @@ from WikiParser import EVENTS, BIRTHS, DEATHS, HOLIDAYS
 
 defaultValues = {
     "lang": "en",
-    "isActivated": True,
+    "isActivated": False,
     "scheduledHour" : 9,
     "selectedSections": [EVENTS, BIRTHS, DEATHS, HOLIDAYS],
     "entriesPerRange": [3, 3, 3],
@@ -16,6 +16,7 @@ defaultValues = {
     "currentInput" : None
 }
 userData = {}
+pendingUserIds = []
 
 if not os.path.exists("./user-data.json"):
     with open("./user-data.json", "w") as f: f.write("{}")

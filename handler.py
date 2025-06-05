@@ -35,6 +35,7 @@ async def handleCallback(callbackQuery: CallbackQuery):
             language = callbackQuery.data[4:]
             if not DataManager.get("isActivated", userId): # User sets language using /start
                 DataManager.upsertUser(userId, language)
+                DataManager.set("isActivated", True, userId)
                 Strs.setLocaleById(userId)
                 KeyboardStore.refreshLocale()
                 await callbackQuery.message.edit_text(Strs.get(Strs.INF_HELP_HEADER)
@@ -102,10 +103,14 @@ async def handleCommand(message: Message):
             case CommandStore.HELP.command:
                 await message.answer(Strs.get(Strs.INF_HELP_HEADER) + CommandStore.listCommandInfo())
             case CommandStore.EVENTSTODAY.command:
-                await message.bot.send_chat_action(message.chat.id, "typing")
-                await sendLargeText(await WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
+                if userId not in DataManager.pendingUserIds:
+                    DataManager.pendingUserIds.append(userId)
+                    await message.bot.send_chat_action(message.chat.id, "typing")
+                    await sendLargeText(await WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
                                                             DataManager.get("entriesPerRange", userId),
                                                             DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), message)
+                else:
+                    await message.answer(Strs.get(Strs.ERR_USER_PENDING)) 
             case CommandStore.EVENTSTHATDAY.command:
                 await message.answer(Strs.get(Strs.INF_SELECT_DATE))
             case CommandStore.EVENTSTHATDAY.command:
@@ -162,10 +167,15 @@ async def handleText(message: Message):
             await message.answer(Strs.get(Strs.ERR_INVALID_DATE)) 
             return
         await message.bot.send_chat_action(message.chat.id, "typing")
-        await sendLargeText(await WikiParser.getPageEvents(page,
-                                                    DataManager.get("selectedSections", userId),
-                                                    DataManager.get("entriesPerRange", userId),
-                                                    DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), message)
+        if userId not in DataManager.pendingUserIds:
+            DataManager.pendingUserIds.append(userId)
+            await message.bot.send_chat_action(message.chat.id, "typing")
+            await sendLargeText(await WikiParser.getPageEvents(page,
+                                            DataManager.get("selectedSections", userId),
+                                            DataManager.get("entriesPerRange", userId),
+                                            DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), message)
+        else:
+            await message.answer(Strs.get(Strs.ERR_USER_PENDING)) 
     else:
         await message.answer(Strs.get(Strs.ERR_NOT_TEXT_INPUT))
 
@@ -206,8 +216,8 @@ async def sendLargeText(text, messagesClass:Message, userId=0):
         except Exception as e:
             print(e)
             await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
-            return
-        
+    DataManager.pendingUserIds.remove(userId)      
+
     
 def assembleMenuText(menuName, userId) -> str:
     formattedSelectedSections = DataManager.get("selectedSections", userId)
