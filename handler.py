@@ -216,7 +216,8 @@ async def sendLargeText(text, messagesClass:Message, userId=0):
         except Exception as e:
             print(e)
             await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
-    DataManager.pendingUserIds.remove(userId)      
+    if userId in DataManager.pendingUserIds:
+        DataManager.pendingUserIds.remove(userId)      
 
     
 def assembleMenuText(menuName, userId) -> str:
@@ -246,7 +247,7 @@ def assembleMenuText(menuName, userId) -> str:
 {Strs.get(Strs.PRF_ENTRIES_PRE1600)}: <code>{formattedEntriesPerRange[0]}</code>
 {Strs.get(Strs.PRF_ENTRIES_1601_1900)}: <code>{formattedEntriesPerRange[1]}</code>
 {Strs.get(Strs.PRF_ENTRIES_MODERN)}: <code>{formattedEntriesPerRange[2]}</code>
-{Strs.get(Strs.PRF_ENTRIES_MODERN)}: <code>{holidaysEntries}</code>
+{Strs.get(Strs.PRF_SECTION_HOLIDAYS)}: <code>{holidaysEntries}</code>
                     ''' 
         case "PREF_ENTRIES_INPUT":
             return f'''
