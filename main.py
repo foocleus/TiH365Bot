@@ -5,7 +5,7 @@ from aiogram.enums import ParseMode
 from os import getenv
 
 from handler import dp, setBotClass
-from logger import Logger
+from logger import logger
 import DataManager
 import scheduler
 
@@ -13,7 +13,7 @@ TOKEN = getenv("TIH365TOKEN")
 
 
 async def main():
-    Logger.info("\n\n\n\n\nScript started")
+    logger.info("\n\n\n\n\nScript started")
     bot = Bot(token=TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     setBotClass(bot)
     asyncio.create_task(DataManager.autoSaveTask())

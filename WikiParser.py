@@ -5,7 +5,6 @@ from copy import deepcopy
 import cacher
 from translator import translator
 from month_full_names import *
-from logger import Logger
 import stores.StringStore as Strs
 
 
@@ -27,6 +26,9 @@ sectionTypes = [EVENTS, BIRTHS, DEATHS, HOLIDAYS]
 filters = [
     "Christian feast day:",
     "День християнського свята:",
+    "Día de la fiesta cristiana:",
+    "Jour de la fête chrétienne:",
+    "Ден на християнски празник:"
 ]
 
 #RANGES = ["=== Pre-1600 ===", "=== 1601-1900 ===", "=== 1901_Present ==="]

@@ -3,7 +3,7 @@ import asyncio
 import json
 from copy import deepcopy
 
-from logger import Logger
+from logger import logger
 from WikiParser import EVENTS, BIRTHS, DEATHS, HOLIDAYS
 
 defaultValues = {
@@ -45,13 +45,13 @@ def set(entry, data, userId):
         userData[userId][entry] = data
     except Exception as e:
         print(f"There was an error saving {entry} of user {userId}")
-        Logger.error(f"There was an error saving {entry} of user {userId}.\n{e}")
+        logger.error(f"There was an error saving {entry} of user {userId}.\n{e}")
 
 def upsertUser(userId:str, language):
     if type(userId) == int: userId = str(userId)
     userData[userId] = deepcopy(defaultValues)
     userData[userId]["lang"] = language
-    Logger.info(f"Upsert of user {userId} with selected language {language} was handled successfully")
+    logger.info(f"Upsert of user {userId} with selected language {language} was handled successfully")
 
 def resetEntry(entry, userId:str):
     userData[userId][entry] = defaultValues[entry]
@@ -61,4 +61,4 @@ async def autoSaveTask():
         await asyncio.sleep(60) # 60 by default
         with open("./user-data.json", "w") as dataFile:
             json.dump(userData, dataFile, indent=4)
-        Logger.info("User data auto saved")
+        logger.info("User data auto saved")

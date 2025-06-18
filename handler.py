@@ -7,6 +7,7 @@ from aiogram.types.callback_query import CallbackQuery
 
 from stores import CommandStore, KeyboardStore, CallbackStore
 from translator import translator
+from logger import logger
 import stores.StringStore as Strs
 import WikiParser
 import DataManager
@@ -214,8 +215,11 @@ async def sendLargeText(text, messagesClass:Message, userId=0):
             else:
                 await messagesClass.send_message(chat_id=userId, text=message)
         except Exception as e:
-            print(e)
-            await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
+            logger.warning(e)
+            try: 
+                await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
+            except Exception as e2: 
+                logger.warning(e2, exc_info=True)
     if userId in DataManager.pendingUserIds:
         DataManager.pendingUserIds.remove(userId)      
 
