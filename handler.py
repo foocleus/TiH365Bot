@@ -25,6 +25,8 @@ PREF_ENTRIES = "PREF_ENTRIES"
 PREF_ENTRIES_INPUT = "PREF_ENTRIES_INPUT"
 PREF_TIME_INPUT = "PREF_TIME_INPUT"
 
+SELECT_YOUR_LANGUAGE = "Select your language:\n 🤖 — Auto-translated"
+
 dp = Dispatcher()
 bot :Bot  = None
 
@@ -66,14 +68,14 @@ async def handleCallback(callbackQuery: CallbackQuery):
             match callbackQuery.data:                    
                 case CallbackStore.RESTART_CONTINUE:
                     DataManager.set("isActivated", False, userId)
-                    await callbackQuery.message.edit_text("Select your language:", reply_markup=KeyboardStore.inline.language)
+                    await callbackQuery.message.edit_text(SELECT_YOUR_LANGUAGE, reply_markup=KeyboardStore.inline.language)
                 case CallbackStore.RESTART_CANCEL:
                     await callbackQuery.message.delete()
                 
                 case CallbackStore.PREFERENCES_MAIN:
                     await callbackQuery.message.edit_text(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
                 case CallbackStore.PREFERENCES_LANGUAGE:
-                    await callbackQuery.message.edit_text("Select your language:", reply_markup=KeyboardStore.inline.language)
+                    await callbackQuery.message.edit_text(SELECT_YOUR_LANGUAGE, reply_markup=KeyboardStore.inline.language)
                 case CallbackStore.PREFERENCES_SECTIONS:
                     await callbackQuery.message.edit_text(assembleMenuText(PREF_SECTIONS, userId), reply_markup=KeyboardStore.inline.preferencesSections)
                 case CallbackStore.PREFERENCES_ENTRIES:
@@ -103,7 +105,7 @@ async def handleCommand(message: Message):
                 if isActivated: 
                     await message.answer(Strs.get(Strs.PRO_RESTART), reply_markup=KeyboardStore.inline.restart)
                 else:
-                    await message.answer("Select your language:", reply_markup=KeyboardStore.inline.language)
+                    await message.answer(SELECT_YOUR_LANGUAGE, reply_markup=KeyboardStore.inline.language)
             case CommandStore.HELP.command:
                 await message.answer(Strs.get(Strs.INF_HELP_HEADER) + CommandStore.listCommandInfo())
             case CommandStore.EVENTSTODAY.command:
@@ -122,7 +124,7 @@ async def handleCommand(message: Message):
             case CommandStore.PREFERENCES.command | CommandStore.PREF.command:
                 await message.answer(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
             case CommandStore.LANGUAGE.command:
-                await message.answer("Select your language:", reply_markup=KeyboardStore.inline.language)
+                await message.answer(SELECT_YOUR_LANGUAGE, reply_markup=KeyboardStore.inline.language)
             case CommandStore.SECTIONS.command:
                 await message.answer(assembleMenuText(PREF_SECTIONS, userId), reply_markup=KeyboardStore.inline.preferencesSections)
             case CommandStore.ENTRIES.command:
@@ -249,10 +251,10 @@ def assembleMenuText(menuName, userId) -> str:
         case "PREF_MAIN":
             return f'''
 {Strs.get(Strs.INF_PREFERENCES)}
-{Strs.get(Strs.PRF_LANGUAGE)} - <code>{DataManager.getValue("lang", userId)}</code>
-{Strs.get(Strs.PRF_SECTIONS)} - <code>{", ".join(formattedSelectedSections)}</code>
-{Strs.get(Strs.PRF_ENTRIES)} - <code>{", ".join(formattedEntriesPerRange) + f", {holidaysEntries}"}</code>
-{Strs.get(Strs.PRF_TIME)} - <code>{DataManager.getValue("scheduledHour", userId)}:00</code> {Strs.get(Strs.INF_KYIV_TIME)}
+{Strs.get(Strs.PRF_LANGUAGE)}: <code>{DataManager.getValue("lang", userId)}</code>
+{Strs.get(Strs.PRF_SECTIONS)}: <code>{", ".join(formattedSelectedSections)}</code>
+{Strs.get(Strs.PRF_ENTRIES)}: <code>{", ".join(formattedEntriesPerRange) + f", {holidaysEntries}"}</code>
+{Strs.get(Strs.PRF_TIME)}: <code>{DataManager.getValue("scheduledHour", userId)}:00</code> {Strs.get(Strs.INF_KYIV_TIME)}
                     '''
         case "PREF_SECTIONS":
             return f'''

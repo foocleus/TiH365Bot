@@ -20,6 +20,7 @@ async def main():
     await tryAnnouncing()
     asyncio.create_task(DataManager.autoSaveTask())
     asyncio.create_task(scheduler.timerTask())
+    print("Started polling")
     await dp.start_polling(bot)
 
 
