@@ -1,7 +1,10 @@
 #from random import randint
 #import asyncio
 #from aiogram.filters import CommandStart, Command
-from aiogram import Dispatcher
+from json import load as jsonload
+from os import path, makedirs, rename
+from datetime import datetime
+from aiogram import Dispatcher, Bot
 from aiogram.types import Message, ContentType
 from aiogram.types.callback_query import CallbackQuery
 
@@ -23,7 +26,7 @@ PREF_ENTRIES_INPUT = "PREF_ENTRIES_INPUT"
 PREF_TIME_INPUT = "PREF_TIME_INPUT"
 
 dp = Dispatcher()
-bot = None
+bot :Bot  = None
 
 # Handle callbacks
 @dp.callback_query()
@@ -34,7 +37,7 @@ async def handleCallback(callbackQuery: CallbackQuery):
     if callbackQuery.message.content_type == ContentType.TEXT:
         if callbackQuery.data[:4] == "lang":
             language = callbackQuery.data[4:]
-            if not DataManager.get("isActivated", userId): # User sets language using /start
+            if not DataManager.getValue("isActivated", userId): # User sets language using /start
                 DataManager.upsertUser(userId, language)
                 DataManager.set("isActivated", True, userId)
                 Strs.setLocaleById(userId)
@@ -49,7 +52,7 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 await callbackQuery.message.edit_text(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
         elif callbackQuery.data[:6] == "toggle":
             sectionName = callbackQuery.data[6:]
-            selectedSections = DataManager.get("selectedSections", userId)
+            selectedSections = DataManager.getValue("selectedSections", userId)
             if selectedSections.count(sectionName) > 0:
                 selectedSections.remove(sectionName)
             else:
@@ -85,14 +88,14 @@ async def handleCallback(callbackQuery: CallbackQuery):
 @dp.message(lambda message: message.content_type == ContentType.TEXT and message.text.startswith('/'))
 async def handleCommand(message: Message):
     userId = message.from_user.id
-    isActivated = DataManager.get("isActivated", userId)
+    isActivated = DataManager.getValue("isActivated", userId)
     Strs.setLocaleById(userId)
     KeyboardStore.refreshLocale()
     if message.content_type == ContentType.TEXT:
         if not isActivated and message.text[1:] != CommandStore.START.command:
             await message.answer("\u274cFinish setup before using the bot functionality") 
             return 
-        if DataManager.get("currentInput", userId) is not None:
+        if DataManager.getValue("currentInput", userId) is not None:
             await message.answer(Strs.get(Strs.ERR_UNFINISHED_INPUT)) 
             return 
         match message.text[1:]:
@@ -107,9 +110,9 @@ async def handleCommand(message: Message):
                 if userId not in DataManager.pendingUserIds:
                     DataManager.pendingUserIds.append(userId)
                     await message.bot.send_chat_action(message.chat.id, "typing")
-                    await sendLargeText(await WikiParser.getTodayEvents(DataManager.get("selectedSections", userId),
-                                                            DataManager.get("entriesPerRange", userId),
-                                                            DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), message)
+                    await sendLargeText(await WikiParser.getTodayEvents(DataManager.getValue("selectedSections", userId),
+                                                            DataManager.getValue("entriesPerRange", userId),
+                                                            DataManager.getValue("holidaysEntries", userId), DataManager.getValue("lang", userId)), message)
                 else:
                     await message.answer(Strs.get(Strs.ERR_USER_PENDING)) 
             case CommandStore.EVENTSTHATDAY.command:
@@ -138,16 +141,16 @@ async def handleText(message: Message):
     Strs.setLocaleById(userId)
     KeyboardStore.refreshLocale()
     if message.content_type == ContentType.TEXT:
-        if not DataManager.get("isActivated", userId):
+        if not DataManager.getValue("isActivated", userId):
             message.answer("\u274cFinish setup before using the bot functionality") 
             return
-        currentInput = DataManager.get("currentInput", userId)
+        currentInput = DataManager.getValue("currentInput", userId)
         if currentInput != None:
             try:
                 match currentInput:
                     case 0 | 1 | 2:
                         if not message.text.isnumeric(): raise Exception()
-                        updatedEntriesPerRange = DataManager.get("entriesPerRange", userId)
+                        updatedEntriesPerRange = DataManager.getValue("entriesPerRange", userId)
                         updatedEntriesPerRange[currentInput] = int(message.text)
                         DataManager.set("entriesPerRange", updatedEntriesPerRange, userId)
                         await message.answer(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
@@ -172,9 +175,9 @@ async def handleText(message: Message):
             DataManager.pendingUserIds.append(userId)
             await message.bot.send_chat_action(message.chat.id, "typing")
             await sendLargeText(await WikiParser.getPageEvents(page,
-                                            DataManager.get("selectedSections", userId),
-                                            DataManager.get("entriesPerRange", userId),
-                                            DataManager.get("holidaysEntries", userId), DataManager.get("lang", userId)), message)
+                                            DataManager.getValue("selectedSections", userId),
+                                            DataManager.getValue("entriesPerRange", userId),
+                                            DataManager.getValue("holidaysEntries", userId), DataManager.getValue("lang", userId)), message)
         else:
             await message.answer(Strs.get(Strs.ERR_USER_PENDING)) 
     else:
@@ -189,12 +192,12 @@ async def sendScheduledMessages(userIds):
     page = WikiParser.getTodayPage()
     for id in userIds:
         await sendLargeText(await WikiParser.getPageEvents(page,
-                                                     DataManager.get("selectedSections", id),
-                                                     DataManager.get("entriesPerRange", id),
-                                                     DataManager.get("holidaysEntries", id), DataManager.get("lang", id)), bot, id)
+                                                     DataManager.getValue("selectedSections", id),
+                                                     DataManager.getValue("entriesPerRange", id),
+                                                     DataManager.getValue("holidaysEntries", id), DataManager.getValue("lang", id)), bot, id)
 
 
-async def sendLargeText(text, messagesClass:Message, userId=0):
+async def sendLargeText(text, messagesClass, userId=0):
     if userId == 0: userId = messagesClass.from_user.id
     #language = DataManager.get("lang", userId).lower()
     lastMessageStartIndex = len(text)
@@ -215,7 +218,7 @@ async def sendLargeText(text, messagesClass:Message, userId=0):
             else:
                 await messagesClass.send_message(chat_id=userId, text=message)
         except Exception as e:
-            logger.warning(e)
+            logger.warning(f"When sending message to user {str(userId)} and exception occurred: {e}")
             try: 
                 await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
             except Exception as e2: 
@@ -223,19 +226,33 @@ async def sendLargeText(text, messagesClass:Message, userId=0):
     if userId in DataManager.pendingUserIds:
         DataManager.pendingUserIds.remove(userId)      
 
+async def tryAnnouncing():
+    annPath = "./announcement.json"
+    sentAnnPath = "./sent-announcements"
+    if not path.exists(annPath): return
+    else: 
+        with open(annPath, "r", encoding="UTF-8") as f:
+            annContent:dict = jsonload(f)
+
+    for userId in DataManager.getAllIds():
+        language = DataManager.getValue("lang", userId)
+        await bot.send_message(chat_id=userId, text=annContent.get(language, annContent["en"]))
+
+    makedirs(sentAnnPath, exist_ok=True)
+    rename(annPath, f"{sentAnnPath}/{datetime.now().strftime('%Y-%m-%d %H.%M.%S')}.json")
     
 def assembleMenuText(menuName, userId) -> str:
-    formattedSelectedSections = DataManager.get("selectedSections", userId)
-    formattedEntriesPerRange = [str(i) for i in DataManager.get("entriesPerRange", userId)]
-    holidaysEntries = DataManager.get("holidaysEntries", userId)
+    formattedSelectedSections = DataManager.getValue("selectedSections", userId)
+    formattedEntriesPerRange = [str(i) for i in DataManager.getValue("entriesPerRange", userId)]
+    holidaysEntries = DataManager.getValue("holidaysEntries", userId)
     match menuName:
         case "PREF_MAIN":
             return f'''
 {Strs.get(Strs.INF_PREFERENCES)}
-{Strs.get(Strs.PRF_LANGUAGE)} - <code>{DataManager.get("lang", userId)}</code>
+{Strs.get(Strs.PRF_LANGUAGE)} - <code>{DataManager.getValue("lang", userId)}</code>
 {Strs.get(Strs.PRF_SECTIONS)} - <code>{", ".join(formattedSelectedSections)}</code>
 {Strs.get(Strs.PRF_ENTRIES)} - <code>{", ".join(formattedEntriesPerRange) + f", {holidaysEntries}"}</code>
-{Strs.get(Strs.PRF_TIME)} - <code>{DataManager.get("scheduledHour", userId)}:00</code> {Strs.get(Strs.INF_KYIV_TIME)}
+{Strs.get(Strs.PRF_TIME)} - <code>{DataManager.getValue("scheduledHour", userId)}:00</code> {Strs.get(Strs.INF_KYIV_TIME)}
                     '''
         case "PREF_SECTIONS":
             return f'''

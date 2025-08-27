@@ -2,8 +2,10 @@ __pycache__/
 .vscode/
 logs/
 cache/
+sent-announcements
 
 *.zip
 
+announcement.json
 user-data.json
 test.py

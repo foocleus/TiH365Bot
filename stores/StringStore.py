@@ -75,7 +75,7 @@ with open("./locales.json", encoding="UTF-8") as localeFile:
 
 
 def getStringDirectly(stringName, userId:int):
-    language = DataManager.get("lang", str(userId))
+    language = DataManager.getValue("lang", str(userId))
     return locales[language].get(stringName, "?")
 
 def setLocale(lang):
@@ -83,7 +83,7 @@ def setLocale(lang):
     selectedLocale = lang
 
 def setLocaleById(userId:int):
-    setLocale(DataManager.get("lang", str(userId)))
+    setLocale(DataManager.getValue("lang", str(userId)))
 
 def get(stringName):
     return locales[selectedLocale].get(stringName, "?")

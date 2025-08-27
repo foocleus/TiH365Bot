@@ -1,6 +1,6 @@
-import os
 import asyncio
 import json
+from os.path import exists
 from copy import deepcopy
 
 from logger import logger
@@ -18,7 +18,7 @@ defaultValues = {
 userData = {}
 pendingUserIds = []
 
-if not os.path.exists("./user-data.json"):
+if not exists("./user-data.json"):
     with open("./user-data.json", "w") as f: f.write("{}")
 
 with open("./user-data.json", "r") as dataFile:
@@ -26,7 +26,7 @@ with open("./user-data.json", "r") as dataFile:
 
 
 
-def get(entry, userId):
+def getValue(entry, userId):
     if type(userId) == int: userId = str(userId)
     if not userId in userData:
         return defaultValues[entry]
@@ -38,6 +38,9 @@ def getIdsByValue(entry, value):
         if userValues.get(entry, defaultValues[entry]) == value:
             ids.append(userId)
     return ids
+
+def getAllIds():
+    return [userId for userId in userData.keys()]
 
 def set(entry, data, userId):
     if type(userId) == int: userId = str(userId)
