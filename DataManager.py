@@ -13,7 +13,8 @@ defaultValues = {
     "selectedSections": [EVENTS, BIRTHS, DEATHS, HOLIDAYS],
     "entriesPerRange": [3, 3, 3],
     "holidaysEntries": 5,
-    "currentInput" : None
+    "currentInput" : None,
+    "hasBlocked": False
 }
 userData = {}
 pendingUserIds = []
@@ -42,7 +43,7 @@ def getIdsByValue(entry, value):
 def getAllIds():
     return [userId for userId in userData.keys()]
 
-def set(entry, data, userId):
+def setValue(entry, data, userId):
     if type(userId) == int: userId = str(userId)
     try:
         userData[userId][entry] = data
@@ -59,9 +60,16 @@ def upsertUser(userId:str, language):
 def resetEntry(entry, userId:str):
     userData[userId][entry] = defaultValues[entry]
 
+def saveData(onExit:bool):
+    with open("./user-data.json", "w") as dataFile:
+        json.dump(userData, dataFile, indent=4)
+    logger.info("User data auto saved")
+    if onExit:
+        logString = "User data has been successfully saved upon termination.\n\n\n"
+        logger.info(logString)
+        print(logString)
+
 async def autoSaveTask():
     while True:
         await asyncio.sleep(60) # 60 by default
-        with open("./user-data.json", "w") as dataFile:
-            json.dump(userData, dataFile, indent=4)
-        logger.info("User data auto saved")
+        saveData(False)

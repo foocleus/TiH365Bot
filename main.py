@@ -1,4 +1,5 @@
 import asyncio
+import atexit
 from aiogram import Bot
 from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
@@ -14,12 +15,12 @@ import scheduler
 
 
 async def main():
-    logger.info("\n\n\n\n\nScript started")
     bot = Bot(token=TEST_TOKEN, default=DefaultBotProperties(parse_mode=ParseMode.HTML))
     setBotClass(bot)
     await tryAnnouncing()
     asyncio.create_task(DataManager.autoSaveTask())
     asyncio.create_task(scheduler.timerTask())
+    atexit.register(DataManager.saveData, True)
     print("Started polling")
     await dp.start_polling(bot)
 

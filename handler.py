@@ -28,7 +28,7 @@ PREF_TIME_INPUT = "PREF_TIME_INPUT"
 SELECT_YOUR_LANGUAGE = "Select your language:\n 🤖 — Auto-translated"
 
 dp = Dispatcher()
-bot :Bot  = None
+bot:Bot  = None
 
 # Handle callbacks
 @dp.callback_query()
@@ -41,14 +41,14 @@ async def handleCallback(callbackQuery: CallbackQuery):
             language = callbackQuery.data[4:]
             if not DataManager.getValue("isActivated", userId): # User sets language using /start
                 DataManager.upsertUser(userId, language)
-                DataManager.set("isActivated", True, userId)
+                DataManager.setValue("isActivated", True, userId)
                 Strs.setLocaleById(userId)
                 KeyboardStore.refreshLocale()
                 await callbackQuery.message.edit_text(Strs.get(Strs.INF_HELP_HEADER)
                                                        + CommandStore.listCommandInfo()
                                                        + Strs.get(Strs.INF_TUTOR_NOTICE))
             else:                                           # User sets language using preferences menu
-                DataManager.set("lang", language, userId)
+                DataManager.setValue("lang", language, userId)
                 Strs.setLocaleById(userId)
                 KeyboardStore.refreshLocale()
                 await callbackQuery.message.edit_text(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
@@ -59,15 +59,15 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 selectedSections.remove(sectionName)
             else:
                 selectedSections.append(sectionName)
-            DataManager.set("selectedSections", selectedSections, userId)
+            DataManager.setValue("selectedSections", selectedSections, userId)
             await callbackQuery.message.edit_text(assembleMenuText(PREF_SECTIONS, userId), reply_markup=KeyboardStore.inline.preferencesSections)
         elif callbackQuery.data[:5] == "input":
-            DataManager.set("currentInput", int(callbackQuery.data[5:]), userId)
+            DataManager.setValue("currentInput", int(callbackQuery.data[5:]), userId)
             await callbackQuery.message.edit_text(assembleMenuText(PREF_ENTRIES_INPUT, userId))
         else:
             match callbackQuery.data:                    
                 case CallbackStore.RESTART_CONTINUE:
-                    DataManager.set("isActivated", False, userId)
+                    DataManager.setValue("isActivated", False, userId)
                     await callbackQuery.message.edit_text(SELECT_YOUR_LANGUAGE, reply_markup=KeyboardStore.inline.language)
                 case CallbackStore.RESTART_CANCEL:
                     await callbackQuery.message.delete()
@@ -81,7 +81,7 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 case CallbackStore.PREFERENCES_ENTRIES:
                     await callbackQuery.message.edit_text(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
                 case CallbackStore.PREFERENCES_TIME:
-                    DataManager.set("currentInput", 4, userId)
+                    DataManager.setValue("currentInput", 4, userId)
                     await callbackQuery.message.edit_text(assembleMenuText(PREF_TIME_INPUT, userId))
                 case _:
                     await callbackQuery.answer(Strs.get(Strs.ERR_SOMETHING_WRONG))
@@ -130,7 +130,7 @@ async def handleCommand(message: Message):
             case CommandStore.ENTRIES.command:
                 await message.answer(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
             case CommandStore.SCHEDULE.command:
-                DataManager.set("currentInput", 4, userId)
+                DataManager.setValue("currentInput", 4, userId)
                 await message.answer(assembleMenuText(PREF_TIME_INPUT, userId))
             case _:
                 await message.answer(Strs.get(Strs.ERR_COMMAND_NOT_EXIST))
@@ -154,17 +154,17 @@ async def handleText(message: Message):
                         if not message.text.isnumeric(): raise Exception()
                         updatedEntriesPerRange = DataManager.getValue("entriesPerRange", userId)
                         updatedEntriesPerRange[currentInput] = int(message.text)
-                        DataManager.set("entriesPerRange", updatedEntriesPerRange, userId)
+                        DataManager.setValue("entriesPerRange", updatedEntriesPerRange, userId)
                         await message.answer(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
                     case 3:
                         if not message.text.isnumeric(): raise Exception()
-                        DataManager.set("holidaysEntries", int(message.text), userId)
+                        DataManager.setValue("holidaysEntries", int(message.text), userId)
                         await message.answer(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
                     case 4:
                         if not message.text.isnumeric() or int(message.text) > 23: raise Exception()
-                        DataManager.set("scheduledHour", int(message.text), userId)
+                        DataManager.setValue("scheduledHour", int(message.text), userId)
                         await message.answer(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
-                DataManager.set("currentInput", None, userId)
+                DataManager.setValue("currentInput", None, userId)
             except:
                 await message.answer(Strs.get(Strs.ERR_INVALID_FORMAT))
             return
@@ -200,7 +200,7 @@ async def sendScheduledMessages(userIds):
 
 
 async def sendLargeText(text, messagesClass, userId=0):
-    if userId == 0: userId = messagesClass.from_user.id
+    if userId == 0: userId = messagesClass.from_user.user
     #language = DataManager.get("lang", userId).lower()
     lastMessageStartIndex = len(text)
     messages = []
@@ -218,13 +218,17 @@ async def sendLargeText(text, messagesClass, userId=0):
             if type(messagesClass) == Message:
                 await messagesClass.answer(message)
             else:
-                await messagesClass.send_message(chat_id=userId, text=message)
+                if not DataManager.getValue("hasBlocked", userId):
+                    await messagesClass.send_message(chat_id=userId, text=message)
         except Exception as e:
             logger.warning(f"When sending message to user {str(userId)} and exception occurred: {e}")
             try: 
                 await messagesClass.answer(Strs.get(Strs.ERR_WIKI_LIMIT))
-            except Exception as e2: 
-                logger.warning(e2, exc_info=True)
+            except Exception as e2:
+                logger.error(e2, exc_info=True)
+                if str(e2).find("blocked") != -1:
+                    DataManager.setValue("hasBlocked", True)
+                    logger.info(f"User {userId} has been marked as blocking and won't receive new messages from bot")
     if userId in DataManager.pendingUserIds:
         DataManager.pendingUserIds.remove(userId)      
 
