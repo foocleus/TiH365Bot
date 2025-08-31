@@ -62,8 +62,10 @@ async def handleCallback(callbackQuery: CallbackQuery):
             DataManager.setValue("selectedSections", selectedSections, userId)
             await callbackQuery.message.edit_text(assembleMenuText(PREF_SECTIONS, userId), reply_markup=KeyboardStore.inline.preferencesSections)
         elif callbackQuery.data[:5] == "input":
-            DataManager.setValue("currentInput", int(callbackQuery.data[5:]), userId)
-            await callbackQuery.message.edit_text(assembleMenuText(PREF_ENTRIES_INPUT, userId))
+            inputNum = int(callbackQuery.data[5:])
+            DataManager.setValue("currentInput", inputNum, userId)
+            await callbackQuery.message.edit_text((assembleMenuText(PREF_ENTRIES_INPUT, userId)
+                                                   .format(DataManager.getValue("entriesPerRange", userId)[inputNum] if inputNum < 4 else DataManager.getValue("entriesPerRange", userId))))
         else:
             match callbackQuery.data:                    
                 case CallbackStore.RESTART_CONTINUE:
@@ -83,6 +85,11 @@ async def handleCallback(callbackQuery: CallbackQuery):
                 case CallbackStore.PREFERENCES_TIME:
                     DataManager.setValue("currentInput", 4, userId)
                     await callbackQuery.message.edit_text(assembleMenuText(PREF_TIME_INPUT, userId))
+
+                case CallbackStore.INPUT_CANCEL:
+                    DataManager.setValue("currentInput", None, userId)
+                    await callbackQuery.message.edit_reply_markup(reply_markup=None)
+
                 case _:
                     await callbackQuery.answer(Strs.get(Strs.ERR_SOMETHING_WRONG))
             
@@ -98,7 +105,7 @@ async def handleCommand(message: Message):
             await message.answer("\u274cFinish setup before using the bot functionality") 
             return 
         if DataManager.getValue("currentInput", userId) is not None:
-            await message.answer(Strs.get(Strs.ERR_UNFINISHED_INPUT)) 
+            await message.answer(Strs.get(Strs.ERR_UNFINISHED_INPUT), reply_markup=KeyboardStore.inline.preferencesInput) 
             return 
         match message.text[1:]:
             case CommandStore.START.command:
@@ -200,7 +207,7 @@ async def sendScheduledMessages(userIds):
 
 
 async def sendLargeText(text, messagesClass, userId=0):
-    if userId == 0: userId = messagesClass.from_user.user
+    if userId == 0: userId = messagesClass.from_user.id
     #language = DataManager.get("lang", userId).lower()
     lastMessageStartIndex = len(text)
     messages = []

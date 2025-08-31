@@ -5,7 +5,7 @@
         "ERR_NOT_TEXT_INPUT": "\u274c The bot supports only text commands. Please open the menu to see the available text commands.",
         "ERR_INVALID_DATE": "\u274c Invalid date format. Use the <code>day.month</code> format.",
         "ERR_INVALID_FORMAT": "\u274c Invalid input format. Please enter only positive integers.",
-        "ERR_UNFINISHED_INPUT": "\u274c Please complete the preference settings before using the commands.",
+        "ERR_UNFINISHED_INPUT": "\u274c You're currently modifying the number of entries per period or time of the scheduled message. Please finish or cancel that modification before using commands.",
         "ERR_WIKI_LIMIT": "\u274c You have reached the limit of wiki messages allowed per 5 minutes.",
         "ERR_USER_PENDING": "\u274c Your previous message is still being processed. Please wait for a response before sending another message.",
 
@@ -21,6 +21,7 @@
         "BUT_ENTRIES_MODERN": "\u270f Adjust the number of 1901-Present entries per message",
         "BUT_ENTRIES_HOLIDAYS": "\u270f Adjust the number of Holidays and observances entries per message",
         "BUT_PREFERENCES_GO_BACK": "\u2b05 Go back",
+        "BUT_INPUT_CANCEL" : "\u2b05 Cancel",
         
         "COM_START": "Resets all preferences.",
         "COM_HELP": "Sends the list of all available commands.",
@@ -37,8 +38,8 @@
         "INF_TUTOR_NOTICE": "\n\u2139 <b>You can open this list any time by typing</b> /help",
         "INF_PREFERENCES": "\u2699 <b>Preferences</b>",
         "INF_SELECT_DATE": "Enter the date for events in <code>day.month</code> format, e.g., <code>03.01</code>, which stands for January 3rd:",
-        "INF_ENTRIES_INPUT": "Enter the number of entries for this period: ",
-        "INF_TIME_INPUT": "Enter the hour to send the scheduled message (0-23): ",
+        "INF_ENTRIES_INPUT": "Enter the number of entries for this period (Currently: {0}): ",
+        "INF_TIME_INPUT": "Enter the hour to send the scheduled message (0-23)(Currently: {0}): ",
         "INF_SECTIONS": "\ud83d\udccd <b>Sections</b>",
         "INF_ENTRIES": "\u2712 <b>Entries per period</b>",
         "INF_SOURCE": "Source",

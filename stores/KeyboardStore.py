@@ -55,6 +55,9 @@ def refreshLocale():
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_ENTRIES_HOLIDAYS), callback_data=CallbackStore.INPUT_ENTRIES_HOLIDAYS)],
             [InlineKeyboardButton(text=Strs.get(Strs.BUT_PREFERENCES_GO_BACK), callback_data=CallbackStore.PREFERENCES_MAIN)],
         ]),
+        preferencesInput = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text=Strs.get(Strs.BUT_INPUT_CANCEL), callback_data=CallbackStore.INPUT_CANCEL)],
+        ]),
     )
     # reply = Reply(
     #     rndCommand = ReplyKeyboardMarkup(one_time_keyboard=True, keyboard=[
