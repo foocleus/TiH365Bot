@@ -48,8 +48,8 @@
         "INF_DEATHS": "\n<b>Famous people who passed away today:</b>",
         "INF_HOLIDAYS": "\n<b>Holidays around the globe today:</b>",
         "INF_KYIV_TIME": "in Kyiv time",
-        "INF_BASIC_COMMANDS": "\n<b>Basic Commands</b>\n",
-        "INF_MORE_COMMANDS": "\n<b>More Commands</b>\n",
+        "INF_PRIMARY_COMMANDS": "\n<b>Primary Commands</b>\n",
+        "INF_SECONDARY_COMMANDS": "\n<b>Secondary Commands</b>\n",
         
         "PRO_RESTART": "<b>\u26a0 Are you sure you want to continue? Continuation of this action will result in DELETION OF ALL OF YOUR PREFERENCES!</b>",
 

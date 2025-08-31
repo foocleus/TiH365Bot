@@ -25,7 +25,7 @@ PREF_ENTRIES = "PREF_ENTRIES"
 PREF_ENTRIES_INPUT = "PREF_ENTRIES_INPUT"
 PREF_TIME_INPUT = "PREF_TIME_INPUT"
 
-SELECT_YOUR_LANGUAGE = "Select your language:\n 🤖 — Auto-translated"
+SELECT_YOUR_LANGUAGE = "Select your language:\n🤖 — Summaries are auto-translated\n½ — Some translations may be missing "
 
 dp = Dispatcher()
 bot:Bot  = None
@@ -264,6 +264,7 @@ def assembleMenuText(menuName, userId) -> str:
 {Strs.get(Strs.PRF_SECTIONS)}: <code>{", ".join(formattedSelectedSections)}</code>
 {Strs.get(Strs.PRF_ENTRIES)}: <code>{", ".join(formattedEntriesPerRange) + f", {holidaysEntries}"}</code>
 {Strs.get(Strs.PRF_TIME)}: <code>{DataManager.getValue("scheduledHour", userId)}:00</code> {Strs.get(Strs.INF_KYIV_TIME)}
+\n<code>v1.1 31.08.25</code>
                     '''
         case "PREF_SECTIONS":
             return f'''

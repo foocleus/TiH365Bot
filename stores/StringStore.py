@@ -47,8 +47,8 @@ INF_ENTRIES = "INF_ENTRIES"
 INF_ENTRIES_INPUT = "INF_ENTRIES_INPUT"
 INF_TIME_INPUT = "INF_TIME_INPUT"
 INF_KYIV_TIME = "INF_KYIV_TIME"
-INF_BASIC_COMMANDS = "INF_BASIC_COMMANDS"
-INF_MORE_COMMANDS = "INF_MORE_COMMANDS"
+INF_PRIMARY_COMMANDS = "INF_PRIMARY_COMMANDS"
+INF_SECONDARY_COMMANDS = "INF_SECONDARY_COMMANDS"
 
 INF_SOURCE = "INF_SOURCE"
 INF_EVENTS = "INF_EVENTS"
@@ -89,4 +89,4 @@ def setLocaleById(userId:int):
     setLocale(DataManager.getValue("lang", str(userId)))
 
 def get(stringName):
-    return locales[selectedLocale].get(stringName, "?")
+    return locales[selectedLocale].get(stringName, locales["en"].get(stringName, "?"))
