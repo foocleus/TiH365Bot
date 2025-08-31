@@ -126,9 +126,7 @@ async def handleCommand(message: Message):
                     await message.answer(Strs.get(Strs.ERR_USER_PENDING)) 
             case CommandStore.EVENTSTHATDAY.command:
                 await message.answer(Strs.get(Strs.INF_SELECT_DATE))
-            case CommandStore.EVENTSTHATDAY.command:
-                pass
-            case CommandStore.PREFERENCES.command | CommandStore.PREF.command:
+            case CommandStore.PREFERENCES.command:
                 await message.answer(assembleMenuText(PREF_MAIN, userId), reply_markup=KeyboardStore.inline.preferences)
             case CommandStore.LANGUAGE.command:
                 await message.answer(SELECT_YOUR_LANGUAGE, reply_markup=KeyboardStore.inline.language)

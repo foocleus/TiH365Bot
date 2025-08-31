@@ -34,7 +34,7 @@
         "COM_ENTRIES": "Opens the entries per period menu directly, bypassing the preferences menu.",
         "COM_SCHEDULE": "Opens the schedule menu directly, bypassing the preferences menu.",
 
-        "INF_HELP_HEADER": "\ud83d\udcc3 Here is the list of all available commands:\n\n",
+        "INF_HELP_HEADER": "\ud83d\udcc3 Here is the list of all available commands:\n",
         "INF_TUTOR_NOTICE": "\n\u2139 <b>You can open this list any time by typing</b> /help",
         "INF_PREFERENCES": "\u2699 <b>Preferences</b>",
         "INF_SELECT_DATE": "Enter the date for events in <code>day.month</code> format, e.g., <code>03.01</code>, which stands for January 3rd:",
@@ -48,6 +48,8 @@
         "INF_DEATHS": "\n<b>Famous people who passed away today:</b>",
         "INF_HOLIDAYS": "\n<b>Holidays around the globe today:</b>",
         "INF_KYIV_TIME": "in Kyiv time",
+        "INF_BASIC_COMMANDS": "\n<b>Basic Commands</b>\n",
+        "INF_MORE_COMMANDS": "\n<b>More Commands</b>\n",
         
         "PRO_RESTART": "<b>\u26a0 Are you sure you want to continue? Continuation of this action will result in DELETION OF ALL OF YOUR PREFERENCES!</b>",
 
