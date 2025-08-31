@@ -63,9 +63,10 @@ async def handleCallback(callbackQuery: CallbackQuery):
             await callbackQuery.message.edit_text(assembleMenuText(PREF_SECTIONS, userId), reply_markup=KeyboardStore.inline.preferencesSections)
         elif callbackQuery.data[:5] == "input":
             inputNum = int(callbackQuery.data[5:])
+            currentlyCount = 0
             DataManager.setValue("currentInput", inputNum, userId)
             await callbackQuery.message.edit_text((assembleMenuText(PREF_ENTRIES_INPUT, userId)
-                                                   .format(DataManager.getValue("entriesPerRange", userId)[inputNum] if inputNum < 4 else DataManager.getValue("entriesPerRange", userId))))
+                                                   .format(DataManager.getValue("entriesPerRange", userId)[inputNum] if inputNum != 2 else DataManager.getValue("holidaysEntries", userId))))
         else:
             match callbackQuery.data:                    
                 case CallbackStore.RESTART_CONTINUE:
@@ -84,7 +85,7 @@ async def handleCallback(callbackQuery: CallbackQuery):
                     await callbackQuery.message.edit_text(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
                 case CallbackStore.PREFERENCES_TIME:
                     DataManager.setValue("currentInput", 4, userId)
-                    await callbackQuery.message.edit_text(assembleMenuText(PREF_TIME_INPUT, userId))
+                    await callbackQuery.message.edit_text(assembleMenuText(PREF_TIME_INPUT, userId).format(DataManager.getValue("scheduledHour", userId)))
 
                 case CallbackStore.INPUT_CANCEL:
                     DataManager.setValue("currentInput", None, userId)
@@ -136,7 +137,7 @@ async def handleCommand(message: Message):
                 await message.answer(assembleMenuText(PREF_ENTRIES, userId), reply_markup=KeyboardStore.inline.preferencesEntries)
             case CommandStore.SCHEDULE.command:
                 DataManager.setValue("currentInput", 4, userId)
-                await message.answer(assembleMenuText(PREF_TIME_INPUT, userId))
+                await message.answer(assembleMenuText(PREF_TIME_INPUT, userId).format(DataManager.getValue("scheduledHour", userId)))
             case _:
                 await message.answer(Strs.get(Strs.ERR_COMMAND_NOT_EXIST))
 

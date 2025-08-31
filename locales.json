@@ -39,7 +39,7 @@
         "INF_PREFERENCES": "\u2699 <b>Preferences</b>",
         "INF_SELECT_DATE": "Enter the date for events in <code>day.month</code> format, e.g., <code>03.01</code>, which stands for January 3rd:",
         "INF_ENTRIES_INPUT": "Enter the number of entries for this period (Currently: {0}): ",
-        "INF_TIME_INPUT": "Enter the hour to send the scheduled message (0-23)(Currently: {0}): ",
+        "INF_TIME_INPUT": "Enter the hour to send the scheduled message (0-23) (Currently: {0}): ",
         "INF_SECTIONS": "\ud83d\udccd <b>Sections</b>",
         "INF_ENTRIES": "\u2712 <b>Entries per period</b>",
         "INF_SOURCE": "Source",
@@ -72,7 +72,7 @@
         "ERR_NOT_TEXT_INPUT": "\u274c Бот підтримує лише текстові команди. Будь ласка, відкрийте меню, щоб побачити доступні текстові команди.",
         "ERR_INVALID_DATE": "\u274c Неправильний формат дати. Використовуйте формат <code>день.місяць</code>.",
         "ERR_INVALID_FORMAT": "\u274c Неправильний формат введення. Вводьте лише додатні цілі числа.",
-        "ERR_UNFINISHED_INPUT": "\u274c Завершіть налаштування вподобань перед використанням команд.",
+        "ERR_UNFINISHED_INPUT": "\u274c Ви зараз змінюєте кількість записів за період або час запланованого повідомлення. Будь ласка, заверште або скасуйте цю зміну перед використанням команд",
         "ERR_WIKI_LIMIT": "\u274c Ви досягли ліміту повідомлень з вікі за 5 хвилин.",
         "ERR_USER_PENDING": "\u274c Ваше попереднє повідомлення ще обробляється. Будь ласка, зачекайте на відповідь, перш ніж надсилати наступне повідомлення.",
     
@@ -88,6 +88,7 @@
         "BUT_ENTRIES_MODERN": "\u270f Налаштувати кількість записів за період 1900-сьогодення у повідомленні",
         "BUT_ENTRIES_HOLIDAYS": "\u270f Налаштувати кількість записів про свята та пам'ятні дні на повідомлення",
         "BUT_PREFERENCES_GO_BACK": "\u2b05 Повернутися назад",
+        "BUT_INPUT_CANCEL" : "\u2b05 Скасувати",
     
         "COM_START": "Скидає всі налаштування.",
         "COM_HELP": "Надсилає список усіх доступних команд.",
@@ -99,12 +100,12 @@
         "COM_ENTRIES": "Відкриває меню вибору кількості записів за період, оминаючи меню налаштувань.",
         "COM_SCHEDULE": "Відкриває меню розкладу, оминаючи меню налаштувань.",
     
-        "INF_HELP_HEADER": "\ud83d\udcc3 Ось список усіх доступних команд:\n\n",
+        "INF_HELP_HEADER": "\ud83d\udcc3 Ось список усіх доступних команд:\n",
         "INF_TUTOR_NOTICE": "\n\u2139 <b>Ви можете відкрити цей список будь-коли, набравши</b> /help",
         "INF_PREFERENCES": "\u2699 <b>Налаштування</b>",
         "INF_SELECT_DATE": "Введіть дату для подій у форматі <code>день.місяць</code>, наприклад, <code>03.01</code>, що означає 3 січня:",
-        "INF_ENTRIES_INPUT": "Введіть кількість записів для цього періоду: ",
-        "INF_TIME_INPUT": "Введіть годину для надсилання запланованого повідомлення (0-23): ",
+        "INF_ENTRIES_INPUT": "Введіть кількість записів для цього періоду (Наразі: {0}): ",
+        "INF_TIME_INPUT": "Введіть годину для надсилання запланованого повідомлення (0-23) (Наразі: {0}): ",
         "INF_SECTIONS": "\ud83d\udccd <b>Розділи</b>",
         "INF_ENTRIES": "\u2712 <b>Записи за період</b>",
         "INF_SOURCE": "Джерело",
@@ -113,6 +114,8 @@
         "INF_DEATHS": "\n<b>Відомі люди, які померли сьогодні:</b>",
         "INF_HOLIDAYS": "\n<b>Свята у світі сьогодні:</b>",
         "INF_KYIV_TIME": "за київським часом",
+        "INF_PRIMARY_COMMANDS": "\n<b>Основні Команди</b>\n",
+        "INF_SECONDARY_COMMANDS": "\n<b>Інші Команди</b>\n",
     
         "PRO_RESTART": "<b>\u26a0 Ви впевнені, що хочете продовжити? Продовження цієї дії призведе до ВИДАЛЕННЯ ВСІХ ВАШИХ НАЛАШТУВАНЬ!</b>",
     
